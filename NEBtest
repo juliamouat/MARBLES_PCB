@@ -73,3 +73,22 @@ exit 0
 
 cd /share/lasallelab/Jules/Placenta_Comethyl/NEBtest/604up50qc5/Unaligned/Project_L3_Nova062P
 sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh
+
+cd /share/lasallelab/Jules/Placenta_Comethyl/NEBtest/604up50qc5
+
+# Arguments
+project=Pilot
+#https://bioinformatics.ucdavis.edu/research-computing/documentation/archiving-slims-data/
+SLIMSstring=604up50qc5
+SLIMSdir=Unaligned/Project_L3_Nova062P
+genome=hg38
+programsPATH=/share/lasallelab/programs
+
+echo "Submitting $genome alignment command to cluster for ${project}"
+sbatch --array=2 /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_controller.sh hg38
+	
+echo ${call}
+eval ${call}
+
+echo "Done"
+exit 0
