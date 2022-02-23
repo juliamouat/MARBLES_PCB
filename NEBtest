@@ -69,3 +69,7 @@ eval ${call}
 
 echo "Done"
 exit 0
+
+
+cd /share/lasallelab/Jules/Placenta_Comethyl/NEBtest/604up50qc5/Unaligned/Project_L3_Nova062P
+sbatch /share/lasallelab/programs/CpG_Me/Paired-end/CpG_Me_PE_QC.sh
