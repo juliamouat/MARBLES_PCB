@@ -1,0 +1,35 @@
+library(broom)
+ME_trait_0.2 <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/ME_Trait_Correlation_Stats_p<0.2.xlsx")
+
+ME_trait_for_model <- ME_trait_0.2[-c(3,27,39,41,47,61,65,71,91,99,104,108,114,127,129,130,136,150,151,155,162,167,175),]
+
+sample_info_comethyl <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", colNames =TRUE, rowNames = FALSE)
+MEs <- read.csv("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Module_Eigennodes.csv")
+ME_PCB_all_samples <- dplyr::left_join(MEs, sample_info_comethyl, by="Name")
+
+
+modules = levels(as.factor(ME_trait_for_model$module))
+
+output = vector(mode="list", length=length(modules))
+names(output) = modules
+
+for (i in modules) {
+  
+  ME_traits <- ME_trait_for_model %>%
+    dplyr::filter(module==i)
+  
+  
+  variables = toString(ME_traits$trait) 
+  variables.new = gsub(",", " +", variables)
+  
+  formula = as.formula(paste(i, "~", variables.new))
+  
+  lm = lm(formula, data=ME_PCB_all_samples)
+  
+  output[[i]] = lm
+  
+}
+
+all_outs <- plyr::ldply(output, tidy, .id="module")
+
+write.xlsx(all_outs, file="/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_MLE/ME_MLE.xlsx")
