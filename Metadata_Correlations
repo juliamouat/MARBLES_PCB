@@ -1,0 +1,100 @@
+#correlate all metadata
+#Pearson's correlations
+sample_info <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", sheet = 1, rowNames = TRUE)
+sample_info.cor = cor(sample_info, use = 'pairwise.complete.obs')
+install.packages("Hmisc")
+library(Hmisc)
+library(RcmdrMisc)
+library(psych)
+sample_info.rcorr = rcorr(as.matrix(sample_info))
+sample_info.coeff = sample_info.rcorr$r
+write.xlsx(as.data.frame(sample_info.coeff), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Pearson/Traits_Correlation_Coefficients.xlsx", colNames = TRUE, rowNames = TRUE)
+sampleinfo.p = sample_info.rcorr$P
+write.xlsx(as.data.frame(sampleinfo.p), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Pearson/Traits_Correlation_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
+sample_info_adjust <- rcorr.adjust(sample_info, type = "pearson", use = 'pairwise.complete.obs')
+sample_info_Holm <- sample_info_adjust$P
+write.xlsx(as.data.frame(sample_info_Holm), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Pearson/Traits_Correlation_Holm.xlsx")
+sample_info_fdr <- corr.test(sample_info, y = NULL, use = "pairwise", method = "pearson", adjust = "fdr", alpha = 0.05)
+write.xlsx(as.data.frame(sample_info_fdr$p), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Pearson/Traits_Correlation_fdr.xlsx")
+
+
+#make heatmap of metadata trait Pearson correlations with traits in categories, hierarchical clustering within categories 
+library(ggplot2)
+library(reshape)
+trait_correlations <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Pearson/Traits_Correlation_Coefficients.xlsx")
+trait_correlations_ggplot <- melt(trait_correlations)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/traits_ggplot_categorized.pdf", width = 12, height = 8)
+trait_heatmap_ggplot <- ggplot(data = trait_correlations_ggplot, aes(x = variable, y = Trait, fill=value)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-1, 1), name = "Pearson") +
+  labs(x="", y="") +
+  coord_fixed() +
+  theme(axis.text = element_text(color = "black"), panel.border = element_rect(colour = "black", fill=NA, size=1.25), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.justification = "top") +
+  scale_x_discrete(limits = c('MomBirthPlace', 'DadBirthPlace', 'MomRace', 'DadRace',  'DadAge', 'MomAge', 'HomeOwnership',
+                              'MomEducation', 'DeliveryPayer', 'DadEducation', 'Sex', 'DadHispanic', 'MomHispanic', 
+                              'GestationalDiabetes', 'PreEclampsia', 'ChronicHypertension', 'MaternalBMI',
+                              'MaternalOmega3s', 'MaternalPlasmaPUFA', 'PrenatalVitamin', 'SmokePregnancy',
+                              'DeliveryMethod', 'BirthMonth', 'BirthSeason', 'BirthYear', 'Parity', 'Apgar5min', 'Apgar1min',   
+                              'BirthWeight', 'BirthLength', 'GestationalAgeDelivery', 'AgeMullen', 'AgeADOS', 'MullenScore', 'ADOScs', 'DiagnosisASD')) +
+  
+  scale_y_discrete(limits = c('DiagnosisASD', 'ADOScs', 'MullenScore', 'AgeADOS', 'AgeMullen', 'GestationalAgeDelivery', 'BirthLength', 'BirthWeight',
+                              'Apgar1min', 'Apgar5min', 'Parity', 'BirthYear', 'BirthSeason', 'BirthMonth', 'DeliveryMethod',
+                              'SmokePregnancy', 'PrenatalVitamin', 'MaternalPlasmaPUFA', 'MaternalOmega3s', 
+                              'MaternalBMI', 'ChronicHypertension', 'PreEclampsia', 'GestationalDiabetes',
+                              'MomHispanic', 'DadHispanic', 'Sex', 'DadEducation', 'DeliveryPayer', 'MomEducation',
+                              'HomeOwnership', 'MomAge', 'DadAge', 'DadRace', 'MomRace', 'DadBirthPlace', 'MomBirthPlace'))
+trait_heatmap_ggplot
+dev.off()
+
+
+#correlate all metadata
+#Spearman correlations
+sample_info <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", sheet = 1, rowNames = TRUE)
+sample_info.cor = cor(sample_info, use = 'pairwise.complete.obs')
+install.packages("Hmisc")
+library(Hmisc)
+sample_info.rcorr = rcorr(as.matrix(sample_info), type = "spearman")
+sample_info.coeff = sample_info.rcorr$r
+write.xlsx(as.data.frame(sample_info.coeff), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Traits_Correlation_Coefficients_Spearman.xlsx", colNames = TRUE, rowNames = TRUE)
+sampleinfo.p = sample_info.rcorr$P
+write.xlsx(as.data.frame(sampleinfo.p), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Traits_Correlation_pValues_Spearman.xlsx", colNames = TRUE, rowNames = TRUE)
+sample_info_adjust <- rcorr.adjust(sample_info, type = "spearman", use = 'pairwise.complete.obs')
+sample_info_Holm <- sample_info_adjust$P
+write.xlsx(as.data.frame(sample_info_Holm), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/Traits_Correlation_Holm.xlsx")
+sample_info_fdr <- corr.test(sample_info, y = NULL, use = "pairwise", method = "spearman", adjust = "fdr", alpha = 0.05)
+write.xlsx(as.data.frame(sample_info_fdr$p), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/Traits_Correlation_fdr.xlsx")
+
+#metadata Spearman correlations p-values with fdr correction
+#traits_correlation_pValues <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/Traits_Correlation_pValues_Spearman.xlsx", rowNames = TRUE, colNames = TRUE)
+#traits_fdr <- sapply(traits_correlation_pValues, p.adjust, method = "fdr")
+#write.xlsx(as.data.frame(traits_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/Traits_Correlation_FDR_Spearman.xlsx")
+
+#make heatmap of metadata trait Spearman correlations with traits in categories, hierarchical clustering within categories 
+library(ggplot2)
+library(reshape)
+trait_correlations <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/Traits_Correlation_Coefficients_Spearman.xlsx")
+trait_correlations_ggplot <- melt(trait_correlations)
+trait_correlations_ggplot$fdr <- 
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/Traits_Correlations/Spearman/traits_ggplot_categorized_Spearman.pdf", width = 12, height = 8)
+trait_heatmap_ggplot <- ggplot(data = trait_correlations_ggplot, aes(x = variable, y = X1, fill=value)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-1, 1), name = "Spearman") +
+  labs(x="", y="") +
+  coord_fixed() +
+  theme(axis.text = element_text(color = "black"), panel.border = element_rect(colour = "black", fill=NA, size=1.25), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.justification = "top") +
+  scale_x_discrete(limits = c('MomBirthPlace', 'DadBirthPlace', 'MomRace', 'DadRace',  'DadAge', 'MomAge', 'HomeOwnership',
+                              'MomEducation', 'DeliveryPayer', 'DadEducation', 'Sex', 'DadHispanic', 'MomHispanic', 
+                              'GestationalDiabetes', 'PreEclampsia', 'ChronicHypertension', 'MaternalBMI',
+                              'MaternalOmega3s', 'MaternalPlasmaPUFA', 'PrenatalVitamin', 'SmokePregnancy',
+                              'DeliveryMethod', 'BirthMonth', 'BirthSeason', 'BirthYear', 'Parity', 'Apgar5min', 'Apgar1min',   
+                              'BirthWeight', 'BirthLength', 'GestationalAgeDelivery', 'AgeMullen', 'AgeADOS', 'MullenScore', 'ADOScs', 'DiagnosisASD')) +
+  
+  scale_y_discrete(limits = c('DiagnosisASD', 'ADOScs', 'MullenScore', 'AgeADOS', 'AgeMullen', 'GestationalAgeDelivery', 'BirthLength', 'BirthWeight',
+                              'Apgar1min', 'Apgar5min', 'Parity', 'BirthYear', 'BirthSeason', 'BirthMonth', 'DeliveryMethod',
+                              'SmokePregnancy', 'PrenatalVitamin', 'MaternalPlasmaPUFA', 'MaternalOmega3s', 
+                              'MaternalBMI', 'ChronicHypertension', 'PreEclampsia', 'GestationalDiabetes',
+                              'MomHispanic', 'DadHispanic', 'Sex', 'DadEducation', 'DeliveryPayer', 'MomEducation',
+                              'HomeOwnership', 'MomAge', 'DadAge', 'DadRace', 'MomRace', 'DadBirthPlace', 'MomBirthPlace'))
+trait_heatmap_ggplot
+dev.off()
+
