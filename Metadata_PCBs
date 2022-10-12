@@ -1,0 +1,309 @@
+#correlate PCBs with metadata 
+PCB_cen <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+colData <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", sheet = 1)
+colData_PCB <- dplyr::right_join(colData, PCB_cen, by="Name")
+
+PCB153_168.Sex <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$Sex)
+PCB153_168.DiagnosisASD <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$DiagnosisASD)
+PCB153_168.MomAge <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$MomAge)
+DadAge <- colData_PCB[!is.na(colData_PCB$DadAge), ]
+PCB153_168.DadAge <- cenken(DadAge$`PCB_153+168`, DadAge$`PCB_153+168_Cen`, DadAge$DadAge)
+MaternalPlasmaPUFA <- colData_PCB[!is.na(colData_PCB$MaternalPlasmaPUFA), ]
+PCB153_168.MaternalPlasmaPUFA <- cenken(MaternalPlasmaPUFA$`PCB_153+168`, MaternalPlasmaPUFA$`PCB_153+168_Cen`, MaternalPlasmaPUFA$MaternalPlasmaPUFA)
+MaternalOmega3s <- colData_PCB[!is.na(colData_PCB$MaternalOmega3s), ]
+PCB153_168.MaternalOmega3s <- cenken(MaternalOmega3s$`PCB_153+168`, MaternalOmega3s$`PCB_153+168_Cen`, MaternalOmega3s$MaternalOmega3s)
+PrenatalVitamin <- colData_PCB[!is.na(colData_PCB$PrenatalVitamin), ]
+PCB153_168.PrenatalVitamin <- cenken(PrenatalVitamin$`PCB_153+168`, PrenatalVitamin$`PCB_153+168_Cen`, PrenatalVitamin$PrenatalVitamin)
+SmokePregnancy <- colData_PCB[!is.na(colData_PCB$SmokePregnancy), ]
+PCB153_168.SmokePregnancy <- cenken(SmokePregnancy$`PCB_153+168`, SmokePregnancy$`PCB_153+168_Cen`, SmokePregnancy$SmokePregnancy)
+DeliveryMethod <- colData_PCB[!is.na(colData_PCB$DeliveryMethod), ]
+PCB153_168.DeliveryMethod <- cenken(DeliveryMethod$`PCB_153+168`, DeliveryMethod$`PCB_153+168_Cen`, DeliveryMethod$DeliveryMethod)
+PCB153_168.BirthWeight <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$BirthWeight)
+BirthLength <- colData_PCB[!is.na(colData_PCB$BirthLength), ]
+PCB153_168.BirthLength <- cenken(BirthLength$`PCB_153+168`, BirthLength$`PCB_153+168_Cen`, BirthLength$BirthLength)
+PCB153_168.Apgar5min <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$Apgar5min)
+PCB153_168.Apgar1min <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$Apgar1min)
+Parity <- colData_PCB[!is.na(colData_PCB$Parity), ]
+PCB153_168.Parity <- cenken(Parity$`PCB_153+168`, Parity$`PCB_153+168_Cen`, Parity$Parity)
+PCB153_168.MaternalBMI <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$MaternalBMI)
+PCB153_168.BirthSeason <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$BirthSeason)
+PCB153_168.MomHispanic <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$MomHispanic)
+PCB153_168.MomRace <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$MomRace)
+PCB153_168.DadHispanic <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$DadHispanic)
+PCB153_168.DadRace <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$DadRace)
+PCB153_168.MomEducation <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$MomEducation)
+DadEducation <- colData_PCB[!is.na(colData_PCB$DadEducation), ]
+PCB153_168.DadEducation <- cenken(DadEducation$`PCB_153+168`, DadEducation$`PCB_153+168_Cen`, DadEducation$DadEducation)
+MomBirthPlace <- colData_PCB[!is.na(colData_PCB$MomBirthPlace), ]
+PCB153_168.MomBirthPlace <- cenken(MomBirthPlace$`PCB_153+168`, MomBirthPlace$`PCB_153+168_Cen`, MomBirthPlace$MomBirthPlace)
+DadBirthPlace <- colData_PCB[!is.na(colData_PCB$DadBirthPlace), ]
+PCB153_168.DadBirthPlace <- cenken(DadBirthPlace$`PCB_153+168`, DadBirthPlace$`PCB_153+168_Cen`, DadBirthPlace$DadBirthPlace)
+PCB153_168.DeliveryPayer <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$DeliveryPayer)
+HomeOwnership <- colData_PCB[!is.na(colData_PCB$HomeOwnership), ]
+PCB153_168.HomeOwnership <- cenken(HomeOwnership$`PCB_153+168`, HomeOwnership$`PCB_153+168_Cen`, HomeOwnership$HomeOwnership)
+PCB153_168.ADOScs <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$ADOScs)
+MullenScore <- colData_PCB[!is.na(colData_PCB$MullenScore), ]
+PCB153_168.MullenScore <- cenken(MullenScore$`PCB_153+168`, MullenScore$`PCB_153+168_Cen`, MullenScore$MullenScore)
+PCB153_168.GestationalAgeDelivery <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$GestationalAgeDelivery)
+PCB153_168.BirthMonth <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$BirthMonth)
+PCB153_168.GestationalDiabetes <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$GestationalDiabetes)
+ChronicHypertension <- colData_PCB[!is.na(colData_PCB$ChronicHypertension), ]
+PCB153_168.ChronicHypertension <- cenken(ChronicHypertension$`PCB_153+168`, ChronicHypertension$`PCB_153+168_Cen`, ChronicHypertension$ChronicHypertension)
+PreEclampsia <- colData_PCB[!is.na(colData_PCB$PreEclampsia), ]
+PCB153_168.PreEclampsia <- cenken(PreEclampsia$`PCB_153+168`, PreEclampsia$`PCB_153+168_Cen`, PreEclampsia$PreEclampsia)
+PCB153_168.AgeADOS <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$AgeADOS)
+AgeMullen <- colData_PCB[!is.na(colData_PCB$AgeMullen), ]
+PCB153_168.AgeMullen <- cenken(AgeMullen$`PCB_153+168`, AgeMullen$`PCB_153+168_Cen`, AgeMullen$AgeMullen)
+PCB153_168.BirthYear <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$BirthYear)
+
+PCB153_168_metadata_correlations <- rbind(PCB153_168.Sex, PCB153_168.DiagnosisASD, PCB153_168.MomAge, PCB153_168.DadAge, PCB153_168.MaternalPlasmaPUFA, PCB153_168.MaternalOmega3s,
+                                          PCB153_168.PrenatalVitamin, PCB153_168.SmokePregnancy, PCB153_168.DeliveryMethod,
+                                          PCB153_168.BirthWeight, PCB153_168.BirthLength, PCB153_168.Apgar5min, PCB153_168.Apgar1min, PCB153_168.Parity,
+                                          PCB153_168.MaternalBMI, PCB153_168.BirthSeason, PCB153_168.MomHispanic,
+                                          PCB153_168.MomRace, PCB153_168.DadHispanic, PCB153_168.DadRace,
+                                          PCB153_168.MomEducation, PCB153_168.DadEducation, PCB153_168.MomBirthPlace, PCB153_168.DadBirthPlace, PCB153_168.DeliveryPayer,
+                                          PCB153_168.HomeOwnership, PCB153_168.ADOScs, PCB153_168.MullenScore, 
+                                          PCB153_168.GestationalAgeDelivery, PCB153_168.BirthMonth, PCB153_168.GestationalDiabetes, PCB153_168.ChronicHypertension,
+                                          PCB153_168.PreEclampsia, PCB153_168.AgeADOS, PCB153_168.AgeMullen, PCB153_168.BirthYear)
+
+write.xlsx(as.data.frame(PCB153_168_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB153_168_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+
+
+PCB170.Sex <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$Sex)
+PCB170.DiagnosisASD <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$DiagnosisASD)
+PCB170.MomAge <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$MomAge)
+DadAge <- colData_PCB[!is.na(colData_PCB$DadAge), ]
+PCB170.DadAge <- cenken(DadAge$`PCB_170`, DadAge$`PCB_170_Cen`, DadAge$DadAge)
+MaternalPlasmaPUFA <- colData_PCB[!is.na(colData_PCB$MaternalPlasmaPUFA), ]
+PCB170.MaternalPlasmaPUFA <- cenken(MaternalPlasmaPUFA$`PCB_170`, MaternalPlasmaPUFA$`PCB_170_Cen`, MaternalPlasmaPUFA$MaternalPlasmaPUFA)
+MaternalOmega3s <- colData_PCB[!is.na(colData_PCB$MaternalOmega3s), ]
+PCB170.MaternalOmega3s <- cenken(MaternalOmega3s$`PCB_170`, MaternalOmega3s$`PCB_170_Cen`, MaternalOmega3s$MaternalOmega3s)
+PrenatalVitamin <- colData_PCB[!is.na(colData_PCB$PrenatalVitamin), ]
+PCB170.PrenatalVitamin <- cenken(PrenatalVitamin$`PCB_170`, PrenatalVitamin$`PCB_170_Cen`, PrenatalVitamin$PrenatalVitamin)
+SmokePregnancy <- colData_PCB[!is.na(colData_PCB$SmokePregnancy), ]
+PCB170.SmokePregnancy <- cenken(SmokePregnancy$`PCB_170`, SmokePregnancy$`PCB_170_Cen`, SmokePregnancy$SmokePregnancy)
+DeliveryMethod <- colData_PCB[!is.na(colData_PCB$DeliveryMethod), ]
+PCB170.DeliveryMethod <- cenken(DeliveryMethod$`PCB_170`, DeliveryMethod$`PCB_170_Cen`, DeliveryMethod$DeliveryMethod)
+PCB170.BirthWeight <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$BirthWeight)
+BirthLength <- colData_PCB[!is.na(colData_PCB$BirthLength), ]
+PCB170.BirthLength <- cenken(BirthLength$`PCB_170`, BirthLength$`PCB_170_Cen`, BirthLength$BirthLength)
+PCB170.Apgar5min <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$Apgar5min)
+PCB170.Apgar1min <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$Apgar1min)
+Parity <- colData_PCB[!is.na(colData_PCB$Parity), ]
+PCB170.Parity <- cenken(Parity$`PCB_170`, Parity$`PCB_170_Cen`, Parity$Parity)
+PCB170.MaternalBMI <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$MaternalBMI)
+PCB170.BirthSeason <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$BirthSeason)
+PCB170.MomHispanic <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$MomHispanic)
+PCB170.MomRace <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$MomRace)
+PCB170.DadHispanic <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$DadHispanic)
+PCB170.DadRace <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$DadRace)
+PCB170.MomEducation <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$MomEducation)
+DadEducation <- colData_PCB[!is.na(colData_PCB$DadEducation), ]
+PCB170.DadEducation <- cenken(DadEducation$`PCB_170`, DadEducation$`PCB_170_Cen`, DadEducation$DadEducation)
+MomBirthPlace <- colData_PCB[!is.na(colData_PCB$MomBirthPlace), ]
+PCB170.MomBirthPlace <- cenken(MomBirthPlace$`PCB_170`, MomBirthPlace$`PCB_170_Cen`, MomBirthPlace$MomBirthPlace)
+DadBirthPlace <- colData_PCB[!is.na(colData_PCB$DadBirthPlace), ]
+PCB170.DadBirthPlace <- cenken(DadBirthPlace$`PCB_170`, DadBirthPlace$`PCB_170_Cen`, DadBirthPlace$DadBirthPlace)
+PCB170.DeliveryPayer <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$DeliveryPayer)
+HomeOwnership <- colData_PCB[!is.na(colData_PCB$HomeOwnership), ]
+PCB170.HomeOwnership <- cenken(HomeOwnership$`PCB_170`, HomeOwnership$`PCB_170_Cen`, HomeOwnership$HomeOwnership)
+PCB170.ADOScs <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$ADOScs)
+MullenScore <- colData_PCB[!is.na(colData_PCB$MullenScore), ]
+PCB170.MullenScore <- cenken(MullenScore$`PCB_170`, MullenScore$`PCB_170_Cen`, MullenScore$MullenScore)
+PCB170.GestationalAgeDelivery <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$GestationalAgeDelivery)
+PCB170.BirthMonth <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$BirthMonth)
+PCB170.GestationalDiabetes <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$GestationalDiabetes)
+ChronicHypertension <- colData_PCB[!is.na(colData_PCB$ChronicHypertension), ]
+PCB170.ChronicHypertension <- cenken(ChronicHypertension$`PCB_170`, ChronicHypertension$`PCB_170_Cen`, ChronicHypertension$ChronicHypertension)
+PreEclampsia <- colData_PCB[!is.na(colData_PCB$PreEclampsia), ]
+PCB170.PreEclampsia <- cenken(PreEclampsia$`PCB_170`, PreEclampsia$`PCB_170_Cen`, PreEclampsia$PreEclampsia)
+PCB170.AgeADOS <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$AgeADOS)
+AgeMullen <- colData_PCB[!is.na(colData_PCB$AgeMullen), ]
+PCB170.AgeMullen <- cenken(AgeMullen$`PCB_170`, AgeMullen$`PCB_170_Cen`, AgeMullen$AgeMullen)
+PCB170.BirthYear <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$BirthYear)
+
+PCB170_metadata_correlations <- rbind(PCB170.Sex, PCB170.DiagnosisASD, PCB170.MomAge, PCB170.DadAge, PCB170.MaternalPlasmaPUFA, PCB170.MaternalOmega3s,
+                                      PCB170.PrenatalVitamin, PCB170.SmokePregnancy, PCB170.DeliveryMethod,
+                                      PCB170.BirthWeight, PCB170.BirthLength, PCB170.Apgar5min, PCB170.Apgar1min, PCB170.Parity,
+                                      PCB170.MaternalBMI, PCB170.BirthSeason, PCB170.MomHispanic,
+                                      PCB170.MomRace, PCB170.DadHispanic, PCB170.DadRace,
+                                      PCB170.MomEducation, PCB170.DadEducation, PCB170.MomBirthPlace, PCB170.DadBirthPlace, PCB170.DeliveryPayer,
+                                      PCB170.HomeOwnership, PCB170.ADOScs, PCB170.MullenScore, 
+                                      PCB170.GestationalAgeDelivery, PCB170.BirthMonth, PCB170.GestationalDiabetes, PCB170.ChronicHypertension,
+                                      PCB170.PreEclampsia, PCB170.AgeADOS, PCB170.AgeMullen, PCB170.BirthYear)
+
+write.xlsx(as.data.frame(PCB170_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB170_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+
+PCB180_193.Sex <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$Sex)
+PCB180_193.DiagnosisASD <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$DiagnosisASD)
+PCB180_193.MomAge <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$MomAge)
+DadAge <- colData_PCB[!is.na(colData_PCB$DadAge), ]
+PCB180_193.DadAge <- cenken(DadAge$`PCB_180+193`, DadAge$`PCB_180+193_Cen`, DadAge$DadAge)
+MaternalPlasmaPUFA <- colData_PCB[!is.na(colData_PCB$MaternalPlasmaPUFA), ]
+PCB180_193.MaternalPlasmaPUFA <- cenken(MaternalPlasmaPUFA$`PCB_180+193`, MaternalPlasmaPUFA$`PCB_180+193_Cen`, MaternalPlasmaPUFA$MaternalPlasmaPUFA)
+MaternalOmega3s <- colData_PCB[!is.na(colData_PCB$MaternalOmega3s), ]
+PCB180_193.MaternalOmega3s <- cenken(MaternalOmega3s$`PCB_180+193`, MaternalOmega3s$`PCB_180+193_Cen`, MaternalOmega3s$MaternalOmega3s)
+PrenatalVitamin <- colData_PCB[!is.na(colData_PCB$PrenatalVitamin), ]
+PCB180_193.PrenatalVitamin <- cenken(PrenatalVitamin$`PCB_180+193`, PrenatalVitamin$`PCB_180+193_Cen`, PrenatalVitamin$PrenatalVitamin)
+SmokePregnancy <- colData_PCB[!is.na(colData_PCB$SmokePregnancy), ]
+PCB180_193.SmokePregnancy <- cenken(SmokePregnancy$`PCB_180+193`, SmokePregnancy$`PCB_180+193_Cen`, SmokePregnancy$SmokePregnancy)
+DeliveryMethod <- colData_PCB[!is.na(colData_PCB$DeliveryMethod), ]
+PCB180_193.DeliveryMethod <- cenken(DeliveryMethod$`PCB_180+193`, DeliveryMethod$`PCB_180+193_Cen`, DeliveryMethod$DeliveryMethod)
+PCB180_193.BirthWeight <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$BirthWeight)
+BirthLength <- colData_PCB[!is.na(colData_PCB$BirthLength), ]
+PCB180_193.BirthLength <- cenken(BirthLength$`PCB_180+193`, BirthLength$`PCB_180+193_Cen`, BirthLength$BirthLength)
+PCB180_193.Apgar5min <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$Apgar5min)
+PCB180_193.Apgar1min <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$Apgar1min)
+Parity <- colData_PCB[!is.na(colData_PCB$Parity), ]
+PCB180_193.Parity <- cenken(Parity$`PCB_180+193`, Parity$`PCB_180+193_Cen`, Parity$Parity)
+PCB180_193.MaternalBMI <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$MaternalBMI)
+PCB180_193.BirthSeason <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$BirthSeason)
+PCB180_193.MomHispanic <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$MomHispanic)
+PCB180_193.MomRace <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$MomRace)
+PCB180_193.DadHispanic <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$DadHispanic)
+PCB180_193.DadRace <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$DadRace)
+PCB180_193.MomEducation <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$MomEducation)
+DadEducation <- colData_PCB[!is.na(colData_PCB$DadEducation), ]
+PCB180_193.DadEducation <- cenken(DadEducation$`PCB_180+193`, DadEducation$`PCB_180+193_Cen`, DadEducation$DadEducation)
+MomBirthPlace <- colData_PCB[!is.na(colData_PCB$MomBirthPlace), ]
+PCB180_193.MomBirthPlace <- cenken(MomBirthPlace$`PCB_180+193`, MomBirthPlace$`PCB_180+193_Cen`, MomBirthPlace$MomBirthPlace)
+DadBirthPlace <- colData_PCB[!is.na(colData_PCB$DadBirthPlace), ]
+PCB180_193.DadBirthPlace <- cenken(DadBirthPlace$`PCB_180+193`, DadBirthPlace$`PCB_180+193_Cen`, DadBirthPlace$DadBirthPlace)
+PCB180_193.DeliveryPayer <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$DeliveryPayer)
+HomeOwnership <- colData_PCB[!is.na(colData_PCB$HomeOwnership), ]
+PCB180_193.HomeOwnership <- cenken(HomeOwnership$`PCB_180+193`, HomeOwnership$`PCB_180+193_Cen`, HomeOwnership$HomeOwnership)
+PCB180_193.ADOScs <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$ADOScs)
+MullenScore <- colData_PCB[!is.na(colData_PCB$MullenScore), ]
+PCB180_193.MullenScore <- cenken(MullenScore$`PCB_180+193`, MullenScore$`PCB_180+193_Cen`, MullenScore$MullenScore)
+PCB180_193.GestationalAgeDelivery <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$GestationalAgeDelivery)
+PCB180_193.BirthMonth <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$BirthMonth)
+PCB180_193.GestationalDiabetes <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$GestationalDiabetes)
+ChronicHypertension <- colData_PCB[!is.na(colData_PCB$ChronicHypertension), ]
+PCB180_193.ChronicHypertension <- cenken(ChronicHypertension$`PCB_180+193`, ChronicHypertension$`PCB_180+193_Cen`, ChronicHypertension$ChronicHypertension)
+PreEclampsia <- colData_PCB[!is.na(colData_PCB$PreEclampsia), ]
+PCB180_193.PreEclampsia <- cenken(PreEclampsia$`PCB_180+193`, PreEclampsia$`PCB_180+193_Cen`, PreEclampsia$PreEclampsia)
+PCB180_193.AgeADOS <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$AgeADOS)
+AgeMullen <- colData_PCB[!is.na(colData_PCB$AgeMullen), ]
+PCB180_193.AgeMullen <- cenken(AgeMullen$`PCB_180+193`, AgeMullen$`PCB_180+193_Cen`, AgeMullen$AgeMullen)
+PCB180_193.BirthYear <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$BirthYear)
+
+PCB180_193_metadata_correlations <- rbind(PCB180_193.Sex, PCB180_193.DiagnosisASD, PCB180_193.MomAge, PCB180_193.DadAge, PCB180_193.MaternalPlasmaPUFA, PCB180_193.MaternalOmega3s,
+                                          PCB180_193.PrenatalVitamin, PCB180_193.SmokePregnancy, PCB180_193.DeliveryMethod,
+                                          PCB180_193.BirthWeight, PCB180_193.BirthLength, PCB180_193.Apgar5min, PCB180_193.Apgar1min, PCB180_193.Parity,
+                                          PCB180_193.MaternalBMI, PCB180_193.BirthSeason, PCB180_193.MomHispanic,
+                                          PCB180_193.MomRace, PCB180_193.DadHispanic, PCB180_193.DadRace,
+                                          PCB180_193.MomEducation, PCB180_193.DadEducation, PCB180_193.MomBirthPlace, PCB180_193.DadBirthPlace, PCB180_193.DeliveryPayer,
+                                          PCB180_193.HomeOwnership, PCB180_193.ADOScs, PCB180_193.MullenScore, 
+                                          PCB180_193.GestationalAgeDelivery, PCB180_193.BirthMonth, PCB180_193.GestationalDiabetes, PCB180_193.ChronicHypertension,
+                                          PCB180_193.PreEclampsia, PCB180_193.AgeADOS, PCB180_193.AgeMullen, PCB180_193.BirthYear)
+
+write.xlsx(as.data.frame(PCB180_193_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB180_193_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+
+
+PCB187.Sex <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$Sex)
+PCB187.DiagnosisASD <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$DiagnosisASD)
+PCB187.MomAge <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$MomAge)
+DadAge <- colData_PCB[!is.na(colData_PCB$DadAge), ]
+PCB187.DadAge <- cenken(DadAge$`PCB_187`, DadAge$`PCB_187_Cen`, DadAge$DadAge)
+MaternalPlasmaPUFA <- colData_PCB[!is.na(colData_PCB$MaternalPlasmaPUFA), ]
+PCB187.MaternalPlasmaPUFA <- cenken(MaternalPlasmaPUFA$`PCB_187`, MaternalPlasmaPUFA$`PCB_187_Cen`, MaternalPlasmaPUFA$MaternalPlasmaPUFA)
+MaternalOmega3s <- colData_PCB[!is.na(colData_PCB$MaternalOmega3s), ]
+PCB187.MaternalOmega3s <- cenken(MaternalOmega3s$`PCB_187`, MaternalOmega3s$`PCB_187_Cen`, MaternalOmega3s$MaternalOmega3s)
+PrenatalVitamin <- colData_PCB[!is.na(colData_PCB$PrenatalVitamin), ]
+PCB187.PrenatalVitamin <- cenken(PrenatalVitamin$`PCB_187`, PrenatalVitamin$`PCB_187_Cen`, PrenatalVitamin$PrenatalVitamin)
+SmokePregnancy <- colData_PCB[!is.na(colData_PCB$SmokePregnancy), ]
+PCB187.SmokePregnancy <- cenken(SmokePregnancy$`PCB_187`, SmokePregnancy$`PCB_187_Cen`, SmokePregnancy$SmokePregnancy)
+DeliveryMethod <- colData_PCB[!is.na(colData_PCB$DeliveryMethod), ]
+PCB187.DeliveryMethod <- cenken(DeliveryMethod$`PCB_187`, DeliveryMethod$`PCB_187_Cen`, DeliveryMethod$DeliveryMethod)
+PCB187.BirthWeight <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$BirthWeight)
+BirthLength <- colData_PCB[!is.na(colData_PCB$BirthLength), ]
+PCB187.BirthLength <- cenken(BirthLength$`PCB_187`, BirthLength$`PCB_187_Cen`, BirthLength$BirthLength)
+PCB187.Apgar5min <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$Apgar5min)
+PCB187.Apgar1min <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$Apgar1min)
+Parity <- colData_PCB[!is.na(colData_PCB$Parity), ]
+PCB187.Parity <- cenken(Parity$`PCB_187`, Parity$`PCB_187_Cen`, Parity$Parity)
+PCB187.MaternalBMI <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$MaternalBMI)
+PCB187.BirthSeason <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$BirthSeason)
+PCB187.MomHispanic <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$MomHispanic)
+PCB187.MomRace <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$MomRace)
+PCB187.DadHispanic <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$DadHispanic)
+PCB187.DadRace <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$DadRace)
+PCB187.MomEducation <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$MomEducation)
+DadEducation <- colData_PCB[!is.na(colData_PCB$DadEducation), ]
+PCB187.DadEducation <- cenken(DadEducation$`PCB_187`, DadEducation$`PCB_187_Cen`, DadEducation$DadEducation)
+MomBirthPlace <- colData_PCB[!is.na(colData_PCB$MomBirthPlace), ]
+PCB187.MomBirthPlace <- cenken(MomBirthPlace$`PCB_187`, MomBirthPlace$`PCB_187_Cen`, MomBirthPlace$MomBirthPlace)
+DadBirthPlace <- colData_PCB[!is.na(colData_PCB$DadBirthPlace), ]
+PCB187.DadBirthPlace <- cenken(DadBirthPlace$`PCB_187`, DadBirthPlace$`PCB_187_Cen`, DadBirthPlace$DadBirthPlace)
+PCB187.DeliveryPayer <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$DeliveryPayer)
+HomeOwnership <- colData_PCB[!is.na(colData_PCB$HomeOwnership), ]
+PCB187.HomeOwnership <- cenken(HomeOwnership$`PCB_187`, HomeOwnership$`PCB_187_Cen`, HomeOwnership$HomeOwnership)
+PCB187.ADOScs <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$ADOScs)
+MullenScore <- colData_PCB[!is.na(colData_PCB$MullenScore), ]
+PCB187.MullenScore <- cenken(MullenScore$`PCB_187`, MullenScore$`PCB_187_Cen`, MullenScore$MullenScore)
+PCB187.GestationalAgeDelivery <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$GestationalAgeDelivery)
+PCB187.BirthMonth <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$BirthMonth)
+PCB187.GestationalDiabetes <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$GestationalDiabetes)
+ChronicHypertension <- colData_PCB[!is.na(colData_PCB$ChronicHypertension), ]
+PCB187.ChronicHypertension <- cenken(ChronicHypertension$`PCB_187`, ChronicHypertension$`PCB_187_Cen`, ChronicHypertension$ChronicHypertension)
+PreEclampsia <- colData_PCB[!is.na(colData_PCB$PreEclampsia), ]
+PCB187.PreEclampsia <- cenken(PreEclampsia$`PCB_187`, PreEclampsia$`PCB_187_Cen`, PreEclampsia$PreEclampsia)
+PCB187.AgeADOS <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$AgeADOS)
+AgeMullen <- colData_PCB[!is.na(colData_PCB$AgeMullen), ]
+PCB187.AgeMullen <- cenken(AgeMullen$`PCB_187`, AgeMullen$`PCB_187_Cen`, AgeMullen$AgeMullen)
+PCB187.BirthYear <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$BirthYear)
+
+PCB187_metadata_correlations <- rbind(PCB187.Sex, PCB187.DiagnosisASD, PCB187.MomAge, PCB187.DadAge, PCB187.MaternalPlasmaPUFA, PCB187.MaternalOmega3s,
+                                      PCB187.PrenatalVitamin, PCB187.SmokePregnancy, PCB187.DeliveryMethod,
+                                      PCB187.BirthWeight, PCB187.BirthLength, PCB187.Apgar5min, PCB187.Apgar1min, PCB187.Parity,
+                                      PCB187.MaternalBMI, PCB187.BirthSeason, PCB187.MomHispanic,
+                                      PCB187.MomRace, PCB187.DadHispanic, PCB187.DadRace,
+                                      PCB187.MomEducation, PCB187.DadEducation, PCB187.MomBirthPlace, PCB187.DadBirthPlace, PCB187.DeliveryPayer,
+                                      PCB187.HomeOwnership, PCB187.ADOScs, PCB187.MullenScore, 
+                                      PCB187.GestationalAgeDelivery, PCB187.BirthMonth, PCB187.GestationalDiabetes, PCB187.ChronicHypertension,
+                                      PCB187.PreEclampsia, PCB187.AgeADOS, PCB187.AgeMullen, PCB187.BirthYear)
+
+write.xlsx(as.data.frame(PCB187_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB187_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+
+#make heatmap of PCBs correlated with traits, to match the Comethyl heatmaps. Traits are categorized and organized hierarachically within categories
+library(ggplot2)
+library(reshape)
+PCB_trait_correlations_flip <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_correlations.xlsx", sheet = "x_y_flipped", colNames = TRUE, rowNames = FALSE)
+PCB_trait_correlations_dataframe <- as.data.frame(PCB_trait_correlations_flip)
+PCB_trait_correlations_ggplot <- melt(PCB_trait_correlations_dataframe)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_ggplot_categorized.pdf", width = 8, height = 8)
+PCB_trait_heatmap_ggplot <- ggplot(data = PCB_trait_correlations_ggplot, aes(x = variable, y= Trait, fill=value)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-0.5, 0.5), name = "Tau") +
+  labs(x="", y="") +
+  coord_fixed() +
+  theme(axis.text = element_text(color = "black"), panel.border = element_rect(colour = "black", fill=NA, size=1.25), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.justification = "top") +  
+  scale_y_discrete(limits = c('DiagnosisASD', 'ADOScs', 'MullenScore', 'AgeADOS', 'AgeMullen', 'GestationalAgeDelivery', 'BirthLength', 'BirthWeight',
+                              'Apgar1min', 'Apgar5min', 'Parity', 'BirthYear', 'BirthSeason', 'BirthMonth', 'DeliveryMethod',
+                              'SmokePregnancy', 'PrenatalVitamin', 'MaternalPlasmaPUFA', 'MaternalOmega3s', 
+                              'MaternalBMI', 'ChronicHypertension', 'PreEclampsia', 'GestationalDiabetes',
+                              'MomHispanic', 'DadHispanic', 'Sex', 'DadEducation', 'DeliveryPayer', 'MomEducation',
+                              'HomeOwnership', 'MomAge', 'DadAge', 'DadRace', 'MomRace', 'DadBirthPlace', 'MomBirthPlace'))
+PCB_trait_heatmap_ggplot
+dev.off()
+
+
+#Calculate p-values and adjusted p-values for PCB-trait correlations
+PCB_traits_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_pvalues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_traits_fdr <- sapply(PCB_traits_p_values, p.adjust, method = "fdr")
+write.xlsx(as.data.frame(PCB_traits_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_fdr.xlsx")
+#PCB_traits_Bonferroni <- sapply(PCB_traits_p_values, p.adjust, method = "bonferroni")
+#write.xlsx(as.data.frame(PCB_traits_Bonferroni), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_Bonferroni.xlsx")
+
+#multiple linear regression with PCBs and metadata traits
+#use all traits that are associated with PCB at p<0.2 after FDR correction (excel sheet "PCB_traits_fdr")
+#remove traits that are correlated r>0.5 with each other (excel sheet "Traits_Correlation_Coefficients"). Use trait that has lower p-value association with PCB
+PCB153_168_cenMLE <- with(colData_PCB, cenreg(Cen(`PCB_153+168`, `PCB_153+168_Cen`) ~ Sex+MomAge+MaternalPlasmaPUFA+BirthWeight+MaternalBMI+DadEducation+MomBirthPlace+DeliveryPayer+HomeOwnership+BirthMonth+BirthYear))
+PCB153_168_cenMLE
+PCB170_cenMLE <- with(colData_PCB, cenreg(Cen(`PCB_170`, `PCB_170_Cen`) ~ MomAge+HomeOwnership))
+PCB170_cenMLE
+PCB180_193_cenMLE <- with(colData_PCB, cenreg(Cen(`PCB_180+193`, `PCB_180+193_Cen`) ~ MomAge+MaternalPlasmaPUFA+DadEducation+DeliveryPayer+HomeOwnership+BirthYear))
+PCB180_193_cenMLE
+PCB187_cenMLE <- with(colData_PCB, cenreg(Cen(`PCB_187`, `PCB_187_Cen`) ~ Sex+MomAge+MaternalPlasmaPUFA+MomHispanic+DadEducation+HomeOwnership))
+PCB187_cenMLE
+#saved as spreadsheet: "PCB_taits_cenMLE"
