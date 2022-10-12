@@ -1,0 +1,388 @@
+#load packages
+.libPaths("/share/lasallelab/programs/comethyl/R_4.1.0/rtest")
+AnnotationHub::setAnnotationHubOption("CACHE", value = "/share/lasallelab/programs/comethyl/R_4.1.0/rtest")
+setwd("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1")
+library(tidyverse)
+library(WGCNA)
+library(comethyl)
+library(Biobase)
+
+BiocManager::install(c("plyr", "zip"))
+
+
+# Set Global Options ####
+options(stringsAsFactors = FALSE)
+Sys.setenv(R_THREADS = 1)
+disableWGCNAThreads()
+
+# Read Bismark CpG Reports ####
+colData <- openxlsx::read.xlsx("sample_info.xlsx", rowNames = TRUE)
+setwd("/share/lasallelab/Jules/MARBLES_PCB/placenta_cytosine_reports")
+bs <- getCpGs(colData, file = "/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Unfiltered_BSseq.rds")
+setwd("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1")
+
+# Examine CpG Totals at Different Cutoffs ####
+CpGtotals <- getCpGtotals(bs, file = "CpG_Totals.txt")
+plotCpGtotals(CpGtotals, file = "CpG_Totals.pdf")
+
+# Filter BSobject ####
+bs <- filterCpGs(bs, cov = 5, perSample = 0.80, file = "Filtered_BSseq.rds")
+
+# Call Regions ####
+regions <- getRegions(bs, file = "Unfiltered_Regions.txt")
+plotRegionStats(regions, maxQuantile = 0.99, file = "Unfiltered_Region_Plots.pdf")
+plotSDstats(regions, maxQuantile = 0.99, file = "Unfiltered_SD_Plots.pdf")
+
+plotRegionStats(regions, maxQuantile = 1, file = "Unfiltered_Region_Plots_maxQuant1.pdf")
+plotSDstats(regions, maxQuantile = 1, file = "Unfiltered_SD_Plots_maxQuant1.pdf")
+
+#get coverage by sample by region to see if certain samples do not have coverage over the selected regions, leading to covMin = 0
+bs <- read_rds("Filtered_BSseq.rds")
+regions <- read.delim("Unfiltered_Regions.txt")
+cov <- bsseq::getCoverage(bs, regions = regions[, c("chr", "start",  "end")], what = "perRegionTotal")
+write.table(cov, file = "Coverage.csv", sep = ",", col.names = NA)
+cov_first_half <- cov[c(1:1000000),]
+write.table(cov_first_half, file = "Coverage_first_half.csv", sep = ",", col.names = NA)
+cov_second_half <- cov[, -c(1:1,000,000)] 
+write.table(cov_second_half, file = "Coverage_second_half.csv", sep = ",", col.names = NA)
+
+#samples JLYZ0066, JLYZ0063, JLYZ0070, JLYZ0062, JLYZ0076, JLYZ0049, JLYZ0040, JLYZ0048, JLYZ0030, JLYZ0020 show 0 coverage over many unfiltered regions. 
+#remove these ten samples from analysis
+samples_to_remove <- c("JLYZ0066", "JLYZ0063", "JLYZ0070", "JLYZ0062", "JLYZ0076", "JLYZ0049", "JLYZ0040", "JLYZ0048", "JLYZ0030", "JLYZ0020")
+colData[!(row.names(colData) %in% samples_to_remove) , ]
+
+# Read Bismark CpG Reports ####
+colData <- openxlsx::read.xlsx("sample_info.xlsx", rowNames = TRUE)
+setwd("/share/lasallelab/Jules/MARBLES_PCB/placenta_cytosine_reports")
+bs <- getCpGs(colData, file = "/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Unfiltered_BSseq.rds")
+setwd("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1")
+
+# Examine CpG Totals at Different Cutoffs ####
+CpGtotals <- getCpGtotals(bs, file = "CpG_Totals.txt")
+plotCpGtotals(CpGtotals, file = "CpG_Totals.pdf")
+
+# Filter BSobject ####
+bs <- filterCpGs(bs, cov = 4, perSample = 0.80, file = "Filtered_BSseq.rds")
+
+# Call Regions ####
+regions <- getRegions(bs, file = "Unfiltered_Regions.txt")
+plotRegionStats(regions, maxQuantile = 0.99, file = "Unfiltered_Region_Plots.pdf")
+plotSDstats(regions, maxQuantile = 0.99, file = "Unfiltered_SD_Plots.pdf")
+
+plotRegionStats(regions, maxQuantile = 1, file = "Unfiltered_Region_Plots_maxQuant1.pdf")
+plotSDstats(regions, maxQuantile = 0.99, file = "Unfiltered_SD_Plots_maxQuant1.pdf")
+
+# Examine Region Totals at Different Cutoffs ####
+regionTotals <- getRegionTotals(regions, file = "Region_Totals.txt")
+plotRegionTotals(regionTotals, file = "Region_Totals.pdf")
+
+# Filter Regions ####
+regions <- filterRegions(regions, covMin = 12, methSD = 0.06,
+                         file = "Filtered_Regions.txt")
+plotRegionStats(regions, maxQuantile = 0.99, file = "Filtered_Region_Plots.pdf")
+plotSDstats(regions, maxQuantile = 0.99, file = "Filtered_SD_Plots.pdf")
+
+# Adjust Methylation Data for PCs ####
+meth <- getRegionMeth(regions, bs = bs, file = "Region_Methylation.rds")
+mod <- model.matrix(~1, data = pData(bs))
+methAdj <- adjustRegionMeth(meth, mod = mod,
+                            file = "Adjusted_Region_Methylation.rds")
+getDendro(methAdj, distance = "euclidean") %>%
+  plotDendro(file = "Sample_Dendrogram.pdf", expandY = c(0.25, 0.08))
+
+# Select Soft Power Threshold ####
+sft <- getSoftPower(methAdj, corType = "pearson", file = "Soft_Power.rds")
+plotSoftPower(sft, file = "Soft_Power_Plots.pdf")
+
+# Get Comethylation Modules ####
+modules <- getModules(methAdj, power = sft$powerEstimate, regions = regions,
+                      corType = "pearson", file = "Modules.rds")
+plotRegionDendro(modules, file = "Region_Dendrograms.pdf")
+BED <- getModuleBED(modules$regions, file = "Modules.bed")
+
+# Examine Correlations between Modules and Samples ####
+MEs <- modules$MEs
+Module_Eigennodes <- write.table(MEs, "Module_Eigennodes.csv", sep = ",", row.names = TRUE, col.names = NA)
+moduleDendro <- getDendro(MEs, distance = "bicor")
+plotDendro(moduleDendro, labelSize = 4, nBreaks = 5,
+           file = "Module_ME_Dendrogram.pdf")
+moduleCor <- getCor(MEs, corType = "bicor")
+plotHeatmap(moduleCor, rowDendro = moduleDendro, colDendro = moduleDendro,
+            file = "Module_Correlation_Heatmap.pdf")
+moduleCorStats <- getMEtraitCor(MEs, colData = MEs, corType = "bicor", robustY = TRUE, file = "Module_Correlation_Stats.txt")
+
+sampleDendro <- getDendro(MEs, transpose = TRUE, distance = "bicor")
+plotDendro(sampleDendro, labelSize = 3, nBreaks = 5,
+           file = "Sample_ME_Dendrogram.pdf")
+sampleCor <- getCor(MEs, transpose = TRUE, corType = "bicor")
+plotHeatmap(sampleCor, rowDendro = sampleDendro, colDendro = sampleDendro,
+            file = "Sample_Correlation_Heatmap.pdf")
+
+plotHeatmap(MEs, rowDendro = sampleDendro, colDendro = moduleDendro,
+            legend.title = "Module\nEigennode",
+            legend.position = c(0.37, 0.89), file = "Sample_ME_Heatmap.pdf")
+
+# Test Correlations between Module Eigennodes and Sample Traits ####
+MEtraitCor <- getMEtraitCor(MEs, colData = colData, corType = "bicor",
+                            file = "ME_Trait_Correlation_Stats.txt")
+traitDendro <- getCor(MEs, y = colData, corType = "bicor", robustY = FALSE) %>%
+  getDendro(transpose = TRUE)
+plotDendro(traitDendro, labelSize = 3.5, expandY = c(0.65, 0.08),
+           file = "Trait_Dendrogram.pdf")
+plotMEtraitCor(MEtraitCor, moduleOrder = moduleDendro$order,
+               traitOrder = traitDendro$order,
+               file = "ME_Trait_Correlation_Heatmap.pdf")
+plotMEtraitCor(MEtraitCor, moduleOrder = moduleDendro$order,
+               traitOrder = traitDendro$order, topOnly = TRUE, label.type = "p",
+               label.size = 4, label.nudge_y = 0, legend.position = c(1.11, 0.795),
+               colColorMargins = c(-1, 4.75, 0.5, 10.1),
+               file = "Top_ME_Trait_Correlation_Heatmap.pdf", width = 8.5,
+               height = 4.25)
+#order traits by categories on ME-trait heatmap
+traitCategories <- list("23", "24", "18", "20", "4", "3", "26", "21", "25", "22", "1", "19", "17",
+                        "31", "33", "32", "15", "6", "5", "7", "8", "9", "30", "16", "36", "14", 
+                        "12", "13", "10", "11", "29", "35", "34", "28", "27", "2")
+traitOrderCategories <- as.numeric(traitCategories)
+plotMEtraitCor(MEtraitCor, moduleOrder = moduleDendro$order,
+               traitOrder = traitOrderCategories,
+               file = "ME_Trait_Correlation_Heatmap_categorized.pdf", colColorMargins = c(-1.0,4.05,1.5,8.6))
+
+# Explore Significant ME-Trait Correlations ####
+# Plot Module Eigennodes vs Traits
+plotMEtraitDot(MEs$salmon, trait = colData$DiagnosisASD,
+               traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+               colors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Diagnosis", ylab = "Salmon Module Eigennode",
+               file = "salmon_ME_Diagnosis_Dotplot.pdf")
+
+plotMEtraitDot(MEs$midnightblue, trait = colData$DiagnosisASD,
+               traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+               colors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Diagnosis", ylab = "Midnightblue Module Eigennode",
+               file = "midnightblue_ME_Diagnosis_Dotplot.pdf")
+
+plotMEtraitDot(MEs$darkturquoise, trait = colData$DiagnosisASD,
+               traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+               colors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Diagnosis", ylab = "Darkturquoise Module Eigennode",
+               file = "darkturquoise_ME_Diagnosis_Dotplot.pdf")
+
+plotMEtraitDot(MEs$tan, trait = colData$DiagnosisASD,
+               traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+               colors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Diagnosis", ylab = "tan Module Eigennode",
+               file = "tan_ME_Diagnosis_Dotplot.pdf")
+
+plotMEtraitDot(MEs$salmon, trait = colData$PrenatalVitamin,
+               traitCode = c("Yes" = 1, "No" = 0),
+               colors = c("Yes" = "#3366CC", "No" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Prenatal vitamin use in month 1", ylab = "Salmon Module Eigennode",
+               file = "salmon_ME_PrenatalVitamin_Dotplot.pdf")
+
+colDataPV <- colData[-18, ]
+MEsPV <- MEs[-18, ]
+
+plotMEtraitDot(MEsPV$red, trait = colDataPV$PrenatalVitamin,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("No" = "#3366CC", "Yes" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Prenatal vitamin use in month 1", ylab = "Red Module Eigennode",
+               file = "red_ME_PrenatalVitamin_Dotplot_no_yes.pdf")
+
+plotMEtraitDot(MEs$red, trait = colData$PrenatalVitamin,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("Yes" = "#3366CC", "No" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Prenatal vitamin use in month 1", ylab = "Red Module Eigennode",
+               file = "red_ME_PrenatalVitamin_Dotplot.pdf")
+
+plotMEtraitDot(MEs$midnightblue, trait = colData$PrenatalVitamin,
+               traitCode = c("Yes" = 1, "No" = 0),
+               colors = c("Yes" = "#3366CC", "No" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Prenatal vitamin use in month 1", ylab = "Midnightblue Module Eigennode",
+               file = "midnightblue_ME_PrenatalVitamin_Dotplot.pdf")
+
+plotMEtraitDot(MEs$midnightblue, trait = colData$MaternalOmega3s,
+               traitCode = c("High" = 1, "Low" = 0),
+               colors = c("High" = "#3366CC", "Low" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "PUFA", ylab = "Midnightblue Module Eigennode",
+               file = "midnightblue_ME_Maternal_Omega3s_Dotplot.pdf")
+
+colDataHTN <- colData[-18, ]
+MEsHTN <- MEs[-18, ]
+plotMEtraitDot(MEsHTN$darkturquoise, trait = colDataHTN$ChronicHypertension,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("No" = "#3366CC", "Yes" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Mom Chronic Hypertension", ylab = "Darkturquoise Module Eigennode",
+               file = "darkturquoise_ME_ChronicHypertension_noNA_Dotplot.pdf")
+
+plotMEtraitDot(MEs$darkturquoise, trait = colData$ChronicHypertension,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("No" = "#3366CC", "Yes" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Mom Chronic Hypertension", ylab = "Darkturquoise Module Eigennode",
+               file = "darkturquoise_ME_ChronicHypertension_Dotplot.pdf")
+
+plotMEtraitDot(MEs$darkturquoise, trait = colData$DadHispanic,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("No" = "#3366CC", "Yes" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Dad Hispanic", ylab = "Darkturquoise Module Eigennode",
+               file = "darkturquoise_ME_DadHispanic_Dotplot.pdf")
+
+plotMEtraitDot(MEs$royalblue, trait = colData$GestationalDiabetes,
+               traitCode = c("No" = 0, "Yes" = 1),
+               colors = c("No" = "#3366CC", "Yes" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Gestational Diabetes", ylab = "RoyalBlue Module Eigennode",
+               file = "royalblue_ME_GestationalDiabetes_Dotplot.pdf")
+
+plotMEtraitDot(MEs$royalblue, trait = colData$DeliveryPayer,
+               traitCode = c("Private" = 1, "Public" = 0),
+               colors = c("Private" = "#3366CC", "Public" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Delivery Payer", ylab = "RoyalBlue Module Eigennode",
+               file = "royalblue_ME_DeliveryPayer_Dotplot.pdf")
+
+plotMEtraitDot(MEs$royalblue, trait = colData$MomBirthPlace,
+               traitCode = c("California" = 0, "Not California" = 1),
+               colors = c("California" = "#3366CC", "Not California" = "#FF3366"), ylim = c(-0.2, 0.2),
+               xlab = "Mom Birth Place", ylab = "RoyalBlue Module Eigennode",
+               file = "royalblue_ME_MomBirthPlace_Dotplot.pdf")
+
+
+plotMEtraitScatter(MEs$salmon, trait = colData$ADOScs, ylim = c(-0.15, 0.15),
+                   xlab = "ADOS Score", ylab = "Salmon Module Eigennode",
+                   file = "salmon_ME_ADOS_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$salmon, trait = colData$MomEducation, ylim = c(-0.15, 0.15),
+                   xlab = "Mom Education", ylab = "Salmon Module Eigennode",
+                   file = "salmon_ME_MomEducation_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$midnightblue, trait = colData$ADOScs, ylim = c(-0.15, 0.15),
+                   xlab = "ADOS Score", ylab = "Midnightblue Module Eigennode",
+                   file = "midnightblue_ME_ADOS_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$darkturquoise, trait = colData$ADOScs, ylim = c(-0.15, 0.15),
+                   xlab = "ADOS Comparison Score", ylab = "Darkturquoise Module Eigennode",
+                   file = "darkturquoise_ME_ADOS_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$tan, trait = colData$ADOScs, ylim = c(-0.15, 0.15),
+                   xlab = "ADOS Score", ylab = "Tan Module Eigennode",
+                   file = "Tan_ME_ADOS_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$midnightblue, trait = colData$MaternalPlasmaPUFA, ylim = c(-0.15, 0.15),
+                   xlab = "Maternal Plasma PUFA", ylab = "Midnightblue Module Eigennode",
+                   file = "midnightblue_ME_Maternal_Plasma_PUFA_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$red, trait = colData$MullenScore, ylim = c(-0.15, 0.15),
+                   xlab = "Mullen Score", ylab = "Red Module Eigennode",
+                   file = "red_ME_MullenScore_Scatterplot.pdf")
+
+plotMEtraitScatter(MEs$royalblue, trait = colData$Apgar5min, ylim = c(-0.15, 0.15),
+                   xlab = "APGAR score 5 minutes", ylab = "RoyalBlue Module Eigennode",
+                   file = "royalblue_ME_APGAR5min_Scatterplot.pdf")
+
+# Plot Region Methylation vs Traits
+regions <- modules$regions
+meth <- readRDS("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Region_Methylation.rds")
+plotMethTrait("salmon", regions = regions, meth = meth,
+              trait = colData$DiagnosisASD, traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+              traitColors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"),
+              trait.legend.title = "Diagnosis",
+              file = "salmon_Module_Methylation_Diagnosis_Heatmap.pdf")
+
+plotMethTrait("darkturquoise", regions = regions, meth = meth,
+              trait = colData$DiagnosisASD, traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
+              traitColors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"),
+              trait.legend.title = "Diagnosis",
+              file = "darkturquoise_Module_Methylation_Diagnosis_Heatmap.pdf")
+
+plotMethTrait("salmon", regions = regions, meth = meth,
+              trait = colData$ADOScs, expandY = 0.04, trait.legend.title = "ADOS Score",
+              trait.legend.position = c(1.034, 3.35),
+              file = "salmon_Module_Methylation_ADOS_Heatmap.pdf")
+
+plotMethTrait("midnightblue", regions = regions, meth = meth,
+              trait = colData$ADOScs, expandY = 0.04, trait.legend.title = "ADOS Score",
+              trait.legend.position = c(1.034, 3.35),
+              file = "midnightblue_Module_Methylation_ADOS_Heatmap.pdf")
+
+plotMethTrait("darkturquoise", regions = regions, meth = meth,
+              trait = colData$ADOScs, expandY = 0.04, trait.legend.title = "ADOS Score",
+              trait.legend.position = c(1.034, 3.35),
+              file = "darkturquoise_Module_Methylation_ADOS_Heatmap.pdf")
+
+
+# Annotate Modules ####
+regionsAnno <- annotateModule(regions, module = NULL, grey = FALSE,
+                              genome = "hg38",
+                              file = "Annotated_Module_Regions.txt")
+
+regionsAnno <- annotateModule(regions, module = NULL, grey = TRUE,
+                              genome = "hg38",
+                              file = "Annotated_Module_Regions_Grey.txt")
+
+
+# Analyze Functional Enrichment ####
+ontologies <- listOntologies("hg38", version = "4.0.4")
+enrich_PCB_modules <- enrichModule(regions, module = c("darkturquoise", "red", "royalblue", "tan","darkgreen"), genome = "hg38",
+                               file = "PCB_Module_Enrichment.txt")
+plotEnrichment(enrich_PCB_modules, file = "PCB_Module_Enrichment_Plot.pdf")
+
+
+
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1")
+
+#Load data 
+colData <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", rowNames=TRUE)
+modules <- readRDS("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Modules.rds")
+regions <- modules$regions
+
+
+# Circos Plot ####
+library(circlize)
+regions_col <- subset(regions, !module == "grey") %>%
+  dplyr::select(chr, start, end, module)
+pdf("Module_Circos_Plot.pdf", width = 3.5, height = 3.5)
+circos.par(gap.degree = 2, cell.padding = c(0.007,0,0.007,0),
+           circle.margin = 0.00001)
+circos.initializeWithIdeogram(species = "hg38", plotType = c("ideogram", "labels"))
+circos.genomicTrack(regions_col, ylim = c(0, 1),
+                    panel.fun = function(region, value, ...) {
+                      circos.genomicRect(region, value, ytop = 1, ybottom = 0,
+                                         border = unlist(value))
+                    })
+circos.clear()
+dev.off()
+
+
+
+
+# Module Region Counts ####
+region_counts <- table(regions_col$module) %>% sort(decreasing = TRUE) %>%
+  as.data.frame()
+region_counts$Var1 <- as.character(region_counts$Var1) %>%
+  factor(levels = rev(region_counts$Var1))
+barplot <- ggplot(aes(x = Var1, y = Freq), data = region_counts) +
+  geom_col(fill = "#132B43") +
+  coord_flip() +
+  scale_x_discrete(expand = expansion(c(0.02))) +
+  scale_y_continuous(breaks = breaks_pretty(n = 4),
+                     expand = expansion(c(0.004, 0.03))) +
+  theme_bw(base_size = 25) +
+  theme(legend.position = "none", panel.grid.major = element_blank(),
+        panel.border = element_rect(color = "black", size = 1.25),
+        axis.ticks.x = element_line(size = 1.25),
+        axis.ticks.y = element_blank(),
+        panel.grid.minor = element_blank(), strip.background = element_blank(),
+        axis.text.x = element_text(color = "black", size = 16),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 20), axis.title.y = element_blank(),
+        plot.margin = unit(c(1,1,0.5,0), "lines")) +
+  ylab("Regions")
+rowColors <- ggplot(data = data.frame(x = 0, y = 1:nrow(region_counts),
+                                      color = rev(region_counts$Var1))) +
+  geom_tile(aes(x = x, y = y, color = color, fill = color)) +
+  scale_fill_identity(aesthetics = c("color", "fill")) +
+  theme_void() +
+  theme(legend.position = "none", plot.margin = unit(c(-0.15,-2,2.9,1),
+                                                     "lines"))
+gg <- plot_grid(rowColors, barplot, ncol = 2, rel_widths = c(0.1, 1))
+ggsave("Module_Region_Counts.pdf", plot = gg, dpi = 600, width = 5, height = 7,
+       units = "in")
+
