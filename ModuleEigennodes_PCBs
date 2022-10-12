@@ -1,0 +1,445 @@
+#MODULE EIGENNODE ~ PCB ASSOCIATIONS
+setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB")
+MEs <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Module_Eigennodes.xlsx")
+censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+attach(censored_PCB_data)
+ME_PCB_all_samples <- dplyr::left_join(MEs, censored_PCB_data, by="Name")
+detach(censored_PCB_data)
+ME_PCB <- na.omit(ME_PCB_all_samples)
+attach(ME_PCB)
+
+#add MEcen column to ME_PCB data frame. All "FALSE" but will allow graphs to show dotted lines instead of circles
+MEcen <- "FALSE"
+MEcen <- as.logical(MEcen)
+ME_PCB$MEcen <- MEcen
+
+
+#Red module 
+Red_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$red)
+Red_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$red)
+Red_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$red)
+Red_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$red) #P-value = 0.0462076
+Red_PCB <- as.data.frame(c(Red_PCB153_168, Red_PCB170, Red_PCB180_193, Red_PCB187))
+Red_PCB$Module <- "Red"
+
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_CpG_Clusters/logPCBy/PCB187_Red_sized.pdf", width = 5, height = 5)
+par(mar = c(4,4,1,1))
+cenxyplot(red, MEcen, `PCB_187`, `PCB_187_Cen`, log="y", xlab = "Red Module Eigennode", ylab = "PCB 187 (ng p g)", col = "#882255", pch = 19)
+dev.off()
+
+#Salmon module
+Salmon_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$salmon)
+Salmon_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$salmon)
+Salmon_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$salmon)
+Salmon_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$salmon)
+Salmon_PCB <- as.data.frame(c(Salmon_PCB153_168, Salmon_PCB170, Salmon_PCB180_193, Salmon_PCB187))
+Salmon_PCB$Module <- "Salmon"
+
+#Yellow module
+Yellow_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$yellow) 
+Yellow_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$yellow)
+Yellow_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$yellow)
+Yellow_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$yellow) 
+Yellow_PCB <- as.data.frame(c(Yellow_PCB153_168, Yellow_PCB170, Yellow_PCB180_193, Yellow_PCB187))
+Yellow_PCB$Module <- "Yellow"
+
+#Brown module
+Brown_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$brown)
+Brown_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$brown)
+Brown_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$brown)
+Brown_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$brown)
+Brown_PCB <- as.data.frame(c(Brown_PCB153_168, Brown_PCB170, Brown_PCB180_193, Brown_PCB187))
+Brown_PCB$Module <- "Brown"
+
+
+#Grey60 module
+Grey60_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$grey60)
+Grey60_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$grey60)
+Grey60_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$grey60)
+Grey60_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$grey60)
+Grey60_PCB <- as.data.frame(c(Grey60_PCB153_168, Grey60_PCB170, Grey60_PCB180_193, Grey60_PCB187))
+Grey60_PCB$Module <- "Grey60"
+
+#Greenyellow module
+Greenyellow_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$greenyellow)
+Greenyellow_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$greenyellow)
+Greenyellow_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$greenyellow)
+Greenyellow_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$greenyellow)
+Greenyellow_PCB <- as.data.frame(c(Greenyellow_PCB153_168, Greenyellow_PCB170, Greenyellow_PCB180_193, Greenyellow_PCB187))
+Greenyellow_PCB$Module <- "Greenyellow"
+
+#Lightgreen module
+Lightgreen_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$lightgreen)
+Lightgreen_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$lightgreen)
+Lightgreen_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$lightgreen)
+Lightgreen_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$lightgreen)
+Lightgreen_PCB <- as.data.frame(c(Lightgreen_PCB153_168, Lightgreen_PCB170, Lightgreen_PCB180_193, Lightgreen_PCB187))
+Lightgreen_PCB$Module <- "Lightgreen"
+
+#Blue module
+Blue_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$blue)
+Blue_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$blue)
+Blue_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$blue)
+Blue_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$blue)
+Blue_PCB <- as.data.frame(c(Blue_PCB153_168, Blue_PCB170, Blue_PCB180_193, Blue_PCB187))
+Blue_PCB$Module <- "Blue"
+
+#Black module
+Black_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$black)
+Black_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$black)
+Black_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$black)
+Black_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$black)
+Black_PCB <- as.data.frame(c(Black_PCB153_168, Black_PCB170, Black_PCB180_193, Black_PCB187))
+Black_PCB$Module <- "Black"
+
+#Lightcyan module
+
+Lightcyan_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$lightcyan)
+Lightcyan_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$lightcyan)
+Lightcyan_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$lightcyan)
+Lightcyan_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$lightcyan)
+Lightcyan_PCB <- as.data.frame(c(Lightcyan_PCB153_168, Lightcyan_PCB170, Lightcyan_PCB180_193, Lightcyan_PCB187))
+Lightcyan_PCB$Module <- "Lightcyan"
+
+#Purple module
+
+Purple_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$purple)
+Purple_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$purple)
+Purple_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$purple)
+Purple_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$purple)
+Purple_PCB <- as.data.frame(c(Purple_PCB153_168, Purple_PCB170, Purple_PCB180_193, Purple_PCB187))
+Purple_PCB$Module <- "Purple"
+
+#Tan module
+Tan_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$tan)
+Tan_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$tan)
+Tan_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$tan)
+Tan_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$tan) #P-value = 0.03270767
+Tan_PCB <- as.data.frame(c(Tan_PCB153_168, Tan_PCB170, Tan_PCB180_193, Tan_PCB187))
+Tan_PCB$Module <- "Tan"
+
+
+#Royalblue module
+Royalblue_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$royalblue) #P-value = 0.04180864
+Royalblue_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$royalblue)
+Royalblue_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$royalblue)
+Royalblue_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$royalblue)
+Royalblue_PCB <- as.data.frame(c(Royalblue_PCB153_168, Royalblue_PCB170, Royalblue_PCB180_193, Royalblue_PCB187))
+Royalblue_PCB$Module <- "Royalblue"
+
+#Green module
+Green_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$green)
+Green_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$green)
+Green_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$green)
+Green_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$green)
+Green_PCB <- as.data.frame(c(Green_PCB153_168, Green_PCB170, Green_PCB180_193, Green_PCB187))
+Green_PCB$Module <- "Green"
+
+
+#Magenta module 
+Magenta_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$magenta)
+Magenta_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$magenta)
+Magenta_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$magenta)
+Magenta_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$magenta)
+Magenta_PCB <- as.data.frame(c(Magenta_PCB153_168, Magenta_PCB170, Magenta_PCB180_193, Magenta_PCB187))
+Magenta_PCB$Module <- "Magenta"
+
+
+#Cyan module
+Cyan_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$cyan)
+Cyan_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$cyan)
+Cyan_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$cyan)
+Cyan_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$cyan)
+Cyan_PCB <- as.data.frame(c(Cyan_PCB153_168, Cyan_PCB170, Cyan_PCB180_193, Cyan_PCB187))
+Cyan_PCB$Module <- "Cyan"
+
+
+#Lightyellow module
+Lightyellow_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$lightyellow)
+Lightyellow_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$lightyellow)
+Lightyellow_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$lightyellow)
+Lightyellow_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$lightyellow)
+Lightyellow_PCB <- as.data.frame(c(Lightyellow_PCB153_168, Lightyellow_PCB170, Lightyellow_PCB180_193, Lightyellow_PCB187))
+Lightyellow_PCB$Module <- "Lightyellow"
+
+#Midnightblue module 
+Midnightblue_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$midnightblue)
+Midnightblue_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$midnightblue)
+Midnightblue_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$midnightblue)
+Midnightblue_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$midnightblue)
+Midnightblue_PCB <- as.data.frame(c(Midnightblue_PCB153_168, Midnightblue_PCB170, Midnightblue_PCB180_193, Midnightblue_PCB187))
+Midnightblue_PCB$Module <- "Midnightblue"
+
+#Turquoise module
+Turquoise_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$turquoise)
+Turquoise_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$turquoise)
+Turquoise_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$turquoise)
+Turquoise_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$turquoise)
+Turquoise_PCB <- as.data.frame(c(Turquoise_PCB153_168, Turquoise_PCB170, Turquoise_PCB180_193, Turquoise_PCB187))
+Turquoise_PCB$Module <- "Turquoise"
+
+#Pink module
+Pink_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$pink)
+Pink_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$pink)
+Pink_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$pink)
+Pink_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$pink)
+Pink_PCB <- as.data.frame(c(Pink_PCB153_168, Pink_PCB170, Pink_PCB180_193, Pink_PCB187))
+Pink_PCB$Module <- "Pink"
+
+#Orange module
+Orange_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$orange) #P-value = 0.07347366
+Orange_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$orange)
+Orange_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$orange)
+Orange_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$orange)
+Orange_PCB <- as.data.frame(c(Orange_PCB153_168, Orange_PCB170, Orange_PCB180_193, Orange_PCB187))
+Orange_PCB$Module <- "Orange"
+
+#Darkgreen
+Darkgreen_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$darkgreen) 
+Darkgreen_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$darkgreen)
+Darkgreen_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$darkgreen)
+Darkgreen_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkgreen)
+Darkgreen_PCB <- as.data.frame(c(Darkgreen_PCB153_168, Darkgreen_PCB170, Darkgreen_PCB180_193, Darkgreen_PCB187))
+Darkgreen_PCB$Module <- "Darkgreen"
+
+
+#Darkgrey module
+Darkgrey_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$darkgrey) 
+Darkgrey_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$darkgrey)
+Darkgrey_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$darkgrey)
+Darkgrey_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkgrey)
+Darkgrey_PCB <- as.data.frame(c(Darkgrey_PCB153_168, Darkgrey_PCB170, Darkgrey_PCB180_193, Darkgrey_PCB187))
+Darkgrey_PCB$Module <- "Darkgrey"
+
+
+#Darkorange module
+Darkorange_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$darkorange) 
+Darkorange_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$darkorange)
+Darkorange_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$darkorange)
+Darkorange_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkorange)
+Darkorange_PCB <- as.data.frame(c(Darkorange_PCB153_168, Darkorange_PCB170, Darkorange_PCB180_193, Darkorange_PCB187))
+Darkorange_PCB$Module <- "Darkorange"
+
+#Darkred module
+Darkred_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$darkred) 
+Darkred_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$darkred)
+Darkred_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$darkred)
+Darkred_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkred)
+Darkred_PCB <- as.data.frame(c(Darkred_PCB153_168, Darkred_PCB170, Darkred_PCB180_193, Darkred_PCB187))
+Darkred_PCB$Module <- "Darkred"
+
+#White module
+White_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$white) 
+White_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$white)
+White_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$white)
+White_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$white)
+White_PCB <- as.data.frame(c(White_PCB153_168, White_PCB170, White_PCB180_193, White_PCB187))
+White_PCB$Module <- "White"
+
+#Darkturquoise module
+Darkturquoise_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$darkturquoise)
+Darkturquoise_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$darkturquoise)
+Darkturquoise_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$darkturquoise)
+Darkturquoise_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkturquoise)
+Darkturquoise_PCB <- as.data.frame(c(Darkturquoise_PCB153_168, Darkturquoise_PCB170, Darkturquoise_PCB180_193, Darkturquoise_PCB187))
+Darkturquoise_PCB$Module <- "Darkturquoise"
+
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB153_168_Darkturquoise_sized.pdf", width = 5, height = 5)
+par(mar = c(4,4,1,1))
+cenxyplot(darkturquoise, MEcen, `PCB_153+168`, `PCB_153+168_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 153 + 168 (ng p g)", col = "#2A0179", pch = 19)
+dev.off()
+
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB170_Darkturquoise_sized.pdf", width = 5, height = 5)
+par(mar = c(4,4,1,1))
+cenxyplot(darkturquoise, MEcen, `PCB_170`, `PCB_170_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 170 (ng p g)", col = "#B8860B", pch = 19)
+dev.off()
+
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB180_193_Darkturquoise_sized.pdf", width = 5, height = 5)
+par(mar = c(4,4,1,1))
+cenxyplot(darkturquoise, MEcen, `PCB_180+193`, `PCB_180+193_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 180 + 193 (ng p g)", col = "#117733", pch = 19)
+dev.off()
+
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB187_Darkturquoise_sized.pdf", width = 5, height = 5)
+par(mar = c(4,4,1,1))
+cenxyplot(darkturquoise, MEcen, `PCB_187`, `PCB_187_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 187 (ng p g)", col = "#882255", pch = 19)
+dev.off()
+
+
+#Grey module
+Grey_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$grey)
+Grey_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$grey)
+Grey_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$grey)
+Grey_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$grey)
+Grey_PCB <- as.data.frame(c(Grey_PCB153_168, Grey_PCB170, Grey_PCB180_193, Grey_PCB187))
+Grey_PCB$Module <- "Grey"
+
+#make excel sheet with PCB-ME correlation data 
+PCB_ME_stats <- list(Black_PCB, Blue_PCB, Brown_PCB, Cyan_PCB, Darkgreen_PCB, Darkgrey_PCB, Darkorange_PCB,
+                     Darkred_PCB, Darkturquoise_PCB, Green_PCB, Greenyellow_PCB, Grey60_PCB, Lightcyan_PCB,
+                     Lightgreen_PCB, Lightyellow_PCB, Magenta_PCB, Midnightblue_PCB, Orange_PCB, Pink_PCB,
+                     Purple_PCB, Red_PCB, Royalblue_PCB, Salmon_PCB, Tan_PCB, Turquoise_PCB, White_PCB, 
+                     Yellow_PCB, Grey_PCB, by = "Module")
+PCB_ME_stats <- Reduce(function(x,y) merge(x,y, all=TRUE), PCB_ME_stats)
+PCB_ME_stats <- PCB_ME_stats %>%
+  rename(PCB153_168_Slope = slope, PCB153_168_Intercept = intercept, PCB153_168_tau = tau, PCB153_168_Pvalue = p,
+         PCB170_Slope = slope.1, PCB170_Intercept = intercept.1, PCB170_tau = tau.1, PCB170_Pvalue = p.1,
+         PCB180_193_Slope = slope.2, PCB180_193_Intercept = intercept.2, PCB180_193_tau = tau.2, PCB180_193_Pvalue = p.2,
+         PCB187_Slope = slope.3, PCB187_Intercept = intercept.3, PCB187_tau = tau.3, PCB187_Pvalue = p.3)
+write.xlsx(PCB_ME_stats, file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_Me_stats.xlsx")
+
+#make heatmap with PCB-ME correlations rotated and in same order as Comethyl-trait figure
+library(ggplot2)
+library(reshape)
+PCB_ME_correlations_flip <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_tau_correlations.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
+PCB_ME_correlations_ggplot_flip <- melt(PCB_ME_correlations_flip)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/ME_PCB_ggplot_flip.pdf", width = 8, height = 4)
+PCB_ME_heatmap_ggplot_flip <- ggplot(data = PCB_ME_correlations_ggplot_flip, aes(x = variable, y = PCB, fill=value)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-0.4, 0.4), name = "Tau") +
+  labs(x="", y="") +
+  coord_fixed() +
+  theme(axis.text = element_text(color = "black"), panel.border = element_rect(colour = "black", fill=NA, size=0.75), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.justification = "top", axis.ticks.length=unit(.15, "cm")) +
+  scale_x_discrete(limits = c('Brown', 'Magenta', 'Blue', 'White', 'Greenyellow', 'Grey', 'Darkgrey', 'Lightyellow', 'Darkturquoise', 'Lightcyan',
+                              'Darkred', 'Red', 'Darkgreen', 'Lightgreen', 'Pink', 'Tan', 'Purple', 'Green', 'Orange', 'Midnightblue',
+                              'Darkorange', 'Royalblue', 'Black', 'Cyan', 'Turquoise', 'Grey60', 'Salmon', 'Yellow')) +
+  scale_y_discrete(limits = c('PCB187', 'PCB180+193', 'PCB170', 'PCB153+168'))
+PCB_ME_heatmap_ggplot_flip
+dev.off()
+
+
+#FDR adjust p-values for PCB-ME correlations
+PCB_ME_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_ME_fdr <- sapply(PCB_ME_p_values, p.adjust, method = "fdr")
+write.xlsx(as.data.frame(PCB_ME_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_fdr.xlsx")
+
+
+
+
+#MODULE EIGENNODE FROM GENE BODIES WITH PCB CORRELATIONS
+setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies")
+MEs_Gene_Bodies <- read_csv("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/Gene_Bodies/Gene_Bodies_Module_Eigennodes.csv")
+censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+attach(censored_PCB_data)
+ME_PCB_all_samples <- dplyr::left_join(MEs_Gene_Bodies, censored_PCB_data, by="Name")
+detach(censored_PCB_data)
+ME_PCB <- na.omit(ME_PCB_all_samples)
+attach(ME_PCB)
+
+#add MEcen column to ME_PCB data frame. All "FALSE" but will allow graphs to show dotted lines instead of circles
+MEcen <- "FALSE"
+MEcen <- as.logical(MEcen)
+ME_PCB$MEcen <- MEcen
+
+#Blue module
+Blue_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$blue)
+Blue_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$blue)
+Blue_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$blue)
+Blue_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$blue)
+Blue_PCB <- as.data.frame(c(Blue_PCB153_168, Blue_PCB170, Blue_PCB180_193, Blue_PCB187))
+Blue_PCB$Module <- "Blue"
+
+#Red module 
+Red_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$red)
+Red_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$red)
+Red_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$red)
+Red_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$red) #P-value = 0.0462076
+Red_PCB <- as.data.frame(c(Red_PCB153_168, Red_PCB170, Red_PCB180_193, Red_PCB187))
+Red_PCB$Module <- "Red"
+
+#Pink module
+Pink_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$pink)
+Pink_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$pink)
+Pink_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$pink)
+Pink_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$pink)
+Pink_PCB <- as.data.frame(c(Pink_PCB153_168, Pink_PCB170, Pink_PCB180_193, Pink_PCB187))
+Pink_PCB$Module <- "Pink"
+
+#Black module
+Black_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$black)
+Black_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$black)
+Black_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$black)
+Black_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$black)
+Black_PCB <- as.data.frame(c(Black_PCB153_168, Black_PCB170, Black_PCB180_193, Black_PCB187))
+Black_PCB$Module <- "Black"
+
+#Brown module
+Brown_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$brown)
+Brown_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$brown)
+Brown_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$brown)
+Brown_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$brown)
+Brown_PCB <- as.data.frame(c(Brown_PCB153_168, Brown_PCB170, Brown_PCB180_193, Brown_PCB187))
+Brown_PCB$Module <- "Brown"
+
+#Turquoise module
+Turquoise_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$turquoise)
+Turquoise_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$turquoise)
+Turquoise_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$turquoise)
+Turquoise_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$turquoise)
+Turquoise_PCB <- as.data.frame(c(Turquoise_PCB153_168, Turquoise_PCB170, Turquoise_PCB180_193, Turquoise_PCB187))
+Turquoise_PCB$Module <- "Turquoise"
+
+#Yellow module
+Yellow_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$yellow) 
+Yellow_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$yellow)
+Yellow_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$yellow)
+Yellow_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$yellow) 
+Yellow_PCB <- as.data.frame(c(Yellow_PCB153_168, Yellow_PCB170, Yellow_PCB180_193, Yellow_PCB187))
+Yellow_PCB$Module <- "Yellow"
+
+#Green module
+Green_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$green)
+Green_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$green)
+Green_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$green)
+Green_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$green)
+Green_PCB <- as.data.frame(c(Green_PCB153_168, Green_PCB170, Green_PCB180_193, Green_PCB187))
+Green_PCB$Module <- "Green"
+
+#Magenta module 
+Magenta_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$magenta)
+Magenta_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$magenta)
+Magenta_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$magenta)
+Magenta_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$magenta)
+Magenta_PCB <- as.data.frame(c(Magenta_PCB153_168, Magenta_PCB170, Magenta_PCB180_193, Magenta_PCB187))
+Magenta_PCB$Module <- "Magenta"
+
+
+#Grey module
+Grey_PCB153_168 <- cenken(`PCB_153+168`, `PCB_153+168_Cen`, ME_PCB$grey)
+Grey_PCB170 <- cenken(`PCB_170`, `PCB_170_Cen`, ME_PCB$grey)
+Grey_PCB180_193 <- cenken(`PCB_180+193`, `PCB_180+193_Cen`, ME_PCB$grey)
+Grey_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$grey)
+Grey_PCB <- as.data.frame(c(Grey_PCB153_168, Grey_PCB170, Grey_PCB180_193, Grey_PCB187))
+Grey_PCB$Module <- "Grey"
+
+#make excel sheet with PCB-ME correlation data 
+PCB_ME_stats <- list(Black_PCB, Blue_PCB, Brown_PCB, Green_PCB, Magenta_PCB, Pink_PCB, Red_PCB,  Turquoise_PCB, Yellow_PCB, Grey_PCB, by = "Module")
+PCB_ME_stats <- Reduce(function(x,y) merge(x,y, all=TRUE), PCB_ME_stats)
+PCB_ME_stats <- PCB_ME_stats %>%
+  rename(PCB153_168_Slope = slope, PCB153_168_Intercept = intercept, PCB153_168_tau = tau, PCB153_168_Pvalue = p,
+         PCB170_Slope = slope.1, PCB170_Intercept = intercept.1, PCB170_tau = tau.1, PCB170_Pvalue = p.1,
+         PCB180_193_Slope = slope.2, PCB180_193_Intercept = intercept.2, PCB180_193_tau = tau.2, PCB180_193_Pvalue = p.2,
+         PCB187_Slope = slope.3, PCB187_Intercept = intercept.3, PCB187_tau = tau.3, PCB187_Pvalue = p.3)
+write.xlsx(PCB_ME_stats, file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies/PCB_ME_Gene_Bodies_stats.xlsx")
+
+#make heatmap with PCB-ME correlations rotated and in same order as Comethyl-trait figure
+library(ggplot2)
+library(reshape)
+PCB_ME_correlations_flip <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies/PCB_ME_Gene_Bodies_tau.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
+PCB_ME_correlations_ggplot_flip <- melt(PCB_ME_correlations_flip)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies/ME_Gene_Bodies_PCB_ggplot_flip.pdf", width = 8, height = 4)
+PCB_ME_heatmap_ggplot_flip <- ggplot(data = PCB_ME_correlations_ggplot_flip, aes(x = variable, y = PCB, fill=value)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-0.4, 0.4), name = "Tau") +
+  labs(x="", y="") +
+  coord_fixed() +
+  theme(axis.text = element_text(color = "black"), panel.border = element_rect(colour = "black", fill=NA, size=0.75), axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.justification = "top", axis.ticks.length=unit(.15, "cm")) +
+  scale_x_discrete(limits = c('Turquoise', 'Yellow', 'Pink', 'Black', 'Brown', 'Green', 'Magenta', 'Grey', 'Blue', 'Red')) +
+  scale_y_discrete(limits = c('PCB187', 'PCB180+193', 'PCB170', 'PCB153+168'))
+PCB_ME_heatmap_ggplot_flip
+dev.off()
+
+
+#FDR adjust p-values for PCB-ME correlations
+PCB_ME_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_ME_fdr <- sapply(PCB_ME_p_values, p.adjust, method = "fdr")
+write.xlsx(as.data.frame(PCB_ME_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_fdr.xlsx")
