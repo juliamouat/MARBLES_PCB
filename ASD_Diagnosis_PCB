@@ -1,0 +1,49 @@
+censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Censored_PCB_Data")
+
+#Censored Boxplot -- Draws a boxplot with the highest censoring threshold shown as a horizontal line. Any statistics below this line are invalid and must be estimated using methods for censored data.
+censored_PCB_data$Diagnosis <- factor(censored_PCB_data$Diagnosis, levels=c("ASD", "non-TD", "TD"))
+
+colors_PCB153_168 <- ifelse(levels(censored_PCB_data$Diagnosis)=="ASD", rgb(0.5,0,0,1), ifelse(levels(censored_PCB_data$Diagnosis)=="non-TD", rgb(0.5,0,0,0.8), rgb(0.5,0,0,0.6)))
+cenboxplot(`PCB_153+168`, `PCB_153+168_Cen`, Diagnosis, ylab = "PCB 153 + 168", xlab = "", col = colors_PCB153_168)
+
+colors_PCB170 <- ifelse(levels(censored_PCB_data$Diagnosis)=="ASD", rgb(0.72,0.53,0.04,1), ifelse(levels(censored_PCB_data$Diagnosis)=="non-TD", rgb(0.72,0.53,0.04,0.8), rgb(0.72,0.53,0.04,0.6)))
+cenboxplot(`PCB_170`, `PCB_170_Cen`, Diagnosis, ylab = "PCB 170", xlab = "", col = colors_PCB170)
+
+colors_PCB180_193 <- ifelse(levels(censored_PCB_data$Diagnosis)=="ASD", rgb(0.0039,0.19,0.13,1), ifelse(levels(censored_PCB_data$Diagnosis)=="non-TD", rgb(0.0039,0.19,0.13,0.8), rgb(0.0039,0.19,0.13,0.6)))
+cenboxplot(`PCB_180+193`, `PCB_180+193_Cen`, Diagnosis, ylab = "PCB 180 + 193", xlab = "", col = colors_PCB180_193)
+
+colors_PCB187 <- ifelse(levels(censored_PCB_data$Diagnosis)=="ASD", rgb(0,0,0.55,1), ifelse(levels(censored_PCB_data$Diagnosis)=="non-TD", rgb(0,0,0.55,0.8), rgb(0,0,0.55,0.6)))
+cenboxplot(`PCB_187`, `PCB_187_Cen`, Diagnosis, ylab = "PCB 187", xlab = "", col = colors_PCB187)
+
+
+#Maximmum Likelihood: Parametric test on the means (PCB) between diagnostic groups
+cenmle(`PCB_153+168`, `PCB_153+168_Cen`, Diagnosis_Numerical)
+
+#change Diagnosis from a character vector to a factor. cendiff, cenfit require a factor
+class(Diagnosis)
+Diagnosis_Factor <- as.factor(Diagnosis)
+class(Diagnosis_Factor)
+
+#plot survival curves by diagnosis
+KM_PCB153_168_Diagnosis <- cenfit(`PCB_153+168`, `PCB_153+168_Cen`, Diagnosis_Factor)
+plot(KM_PCB153_168_Diagnosis, xlab = "PCB 153 + 168", ylab = "Probability", col = colors_PCB153_168, lwd = 2)
+legend("bottomright", legend = c("ASD", "non-TD", "TD"), lty = c(1, 2, 3), col = colors_PCB153_168, lwd = 2)
+
+KM_PCB170_Diagnosis <- cenfit(`PCB_170`, `PCB_170_Cen`, Diagnosis_Factor)
+plot(KM_PCB170_Diagnosis, xlab = "PCB 170", ylab = "Probability", col = colors_PCB170, lwd = 2)
+legend("bottomright", legend = c("ASD", "non-TD", "TD"), lty = c(1, 2, 3), col = colors_PCB170, lwd = 2)
+
+
+KM_PCB180_193_Diagnosis <- cenfit(`PCB_180+193`, `PCB_180+193_Cen`, Diagnosis_Factor)
+plot(KM_PCB180_193_Diagnosis, xlab = "PCB 180 + 193", ylab = "Probability", col = colors_PCB180_193, lwd = 2)
+legend("bottomright", legend = c("ASD", "non-TD", "TD"), lty = c(1, 2, 3), col = colors_PCB180_193, lwd = 2)
+
+KM_PCB187_Diagnosis <- cenfit(`PCB_187`, `PCB_187_Cen`, Diagnosis_Factor)
+plot(KM_PCB187_Diagnosis, xlab = "PCB 187", ylab = "Probability", col = colors_PCB187, lwd = 2)
+legend("bottomright", legend = c("ASD", "non-TD", "TD"), lty = c(1, 2, 3), col = colors_PCB187, lwd = 2)
+
+#Peto-Prentice Test: Non-parametric test on the means (PCB) between diagnostic groups
+cendiff(`PCB_153+168`, `PCB_153+168_Cen`, Diagnosis_Factor)
+cendiff(`PCB_170`, `PCB_170_Cen`, Diagnosis_Factor)
+cendiff(`PCB_180+193`, `PCB_180+193_Cen`, Diagnosis_Factor)
+cendiff(`PCB_187`, `PCB_187_Cen`, Diagnosis_Factor)
