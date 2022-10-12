@@ -1,3 +1,3 @@
 # MARBLES_PCB
 
-Investigating correlations between comethylation in placenta samples and diagnosis of ASD, as well as maternal serum PCB levels
+Networks of placental DNA methylation correlate with maternal serum PCB concentrations and child neurodevelopment 
