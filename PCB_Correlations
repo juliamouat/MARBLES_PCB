@@ -1,0 +1,41 @@
+#PCBPCB153+168 vs PCB170
+cenken(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_170`, PCB_170_Cen)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB153+168vs170_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_170`, PCB_170_Cen, xlab="", ylab="", log = "xy", pch = 16,  cex.axis = 1.5)
+dev.off()
+
+#PCB153+168 vs PCB180+193
+cenken(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_180+193`, `PCB_180+193_Cen`)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB153+168vs180_193_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_180+193`, `PCB_180+193_Cen`, xlab = "", ylab = "", log = "xy", pch = 16,  cex.axis = 1.5)
+dev.off()
+
+#PCB153+168 vs PCB187
+cenken(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_187`, PCB_187_Cen)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB153+168vs187_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_153+168`, `PCB_153+168_Cen`, `PCB_187`, PCB_187_Cen, xlab = "", ylab = "", log = "xy", pch = 16,  cex.axis = 1.5)
+dev.off()
+
+#PCB170 vs PCB180+193
+cenken(`PCB_170`, PCB_170_Cen, `PCB_180+193`, `PCB_180+193_Cen`)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB170vs180_193_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_170`, PCB_170_Cen, `PCB_180+193`, `PCB_180+193_Cen`,  xlab = "", ylab = "", log = "xy", pch = 16, cex.axis = 1.5)
+dev.off()
+
+#PCB170 vs PCB187
+cenken(`PCB_170`, `PCB_170_Cen`, `PCB_187`, PCB_187_Cen)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB170vs187_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_170`, `PCB_170_Cen`, `PCB_187`, PCB_187_Cen, xlab = "", ylab = "", log = "xy", pch = 16, cex.axis = 1.5)
+dev.off()
+
+#PCB180+193 vs PCB187
+cenken(`PCB_180+193`, `PCB_180+193_Cen`, `PCB_187`, PCB_187_Cen)
+pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Figures/PCB180_193vs187_log.pdf", width = 3.5, height = 3.5)
+par(mar = c(3,3,1,1))
+cenxyplot(`PCB_180+193`, `PCB_180+193_Cen`, `PCB_187`, PCB_187_Cen, xlab = "", ylab = "", log = "xy", pch = 16, cex.axis = 1.5)
+dev.off()
