@@ -39,3 +39,10 @@ pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/
 par(mar = c(3,3,1,1))
 cenxyplot(`PCB_180+193`, `PCB_180+193_Cen`, `PCB_187`, PCB_187_Cen, xlab = "", ylab = "", log = "xy", pch = 16, cex.axis = 1.5)
 dev.off()
+
+#COMPARE VALUES OF PCB CONGENERS TO SUMMED PCBs (ng/g for detected congeners)
+cenken(`PCB_153+168`, `PCB_153+168_Cen`, `TotalPCB(ng/g)`)
+cenken(`PCB_170`, `PCB_170_Cen`, `TotalPCB(ng/g)`)
+cenken(`PCB_180+193`, `PCB_180+193_Cen`, `TotalPCB(ng/g)`)
+cenken(`PCB_187`, `PCB_187_Cen`, `TotalPCB(ng/g)`)
+
