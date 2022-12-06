@@ -1,0 +1,114 @@
+#MARBLES PCB Frequency Detection
+#detect frequency of PCBs across maternal age, offspring birth year, maternal BMI, offspring ASD diagnosis, offspring sex 
+#R script from Xueshu Li
+
+#removed duplicate samples (mothers who had multiple children enrolled in study): mother ID 525101, 533101, 535901, 505301, 505501, 525001, 528101 
+
+#Sex: offspring is M or F
+#DiagnosisASD: ASD, TD, non-TD
+#MomAge: mother's age at birth, grouped into >35 and =<35
+#Maternal BMI: maternal BMI pre-pregnancy, grouped into underweight/normal weight (=<25) vs overweight/obese (>25)
+#BirthYear: year the offspring was born, grouped into 2006-2011 and 2012-2016
+
+setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection")
+
+PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx", sheet = "PCB (ng)")
+Metadata <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx", sheet = "Metadata")
+
+PCBfile = merge(PCB_data, Metadata, by = "tissueID", all = FALSE, sort = FALSE)
+write.xlsx(PCBfile, "/Users/juliamouat/Desktop/PCBfile.xlsx")
+
+library(readxl)
+library(coin)
+library(VGAM)
+library(censReg)
+
+PCB.file ="/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx"
+mydata = data.frame(id = as.character(read_excel(PCB.file, range="F2:CW2", col_name=FALSE)),
+                    sex = as.character(read_excel(PCB.file, range = "F6:CW6", col_name=FALSE)),
+                    diagnosis = as.character(read_excel(PCB.file, range = "F7:CW7", col_name=FALSE)),
+                    momage = as.numeric(read_excel(PCB.file, range = "F8:CW8", col_name=FALSE)),
+                    maternalBMI = as.numeric(read_excel(PCB.file, range = "F9:CW9", col_name=FALSE)),
+                    birthyear = as.numeric(read_excel(PCB.file, range = "F10:CW10", col_name=FALSE)),
+                    tissue.weight = as.numeric(read_excel(PCB.file, range="F4:CW4",col_name=FALSE)))
+raw = as.data.frame(read_excel(PCB.file, range = "A10:CW183"))
+attach(mydata)
+attach(raw)
+
+result = n.detected = NULL
+for (pcb in Congener){
+  PCB.amount = t(raw[Congener == pcb, -(1:5)])
+  lod = `LOD(ng)`[Congener == pcb]
+  
+  detected = (PCB.amount > lod)
+  nn = sum(detected)
+  n.detected = c(n.detected, nn)
+  
+  # Tobit analysis
+  if (nn == 0) {
+    t1 = t2 = t3 = t4 = t5 = NA
+  }
+  else if (nn < nrow(mydata)){   # some are not detected
+    PCB.amount[PCB.amount < lod] = lod
+    t0 = censReg(PCB.amount ~ tissue.weight, left = lod)
+    
+    tt = censReg(PCB.amount ~ (momage > 35) + tissue.weight, left = lod)
+    t1 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = censReg(PCB.amount ~ (maternalBMI > 25) + tissue.weight, left = lod)
+    t2 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = censReg(PCB.amount ~ (birthyear > 2011) + tissue.weight, left = lod)
+    t3 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = censReg(PCB.amount ~ diagnosis + tissue.weight, left = lod)
+    t4 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 2)
+    
+    tt = censReg(PCB.amount ~ sex + tissue.weight, left = lod)
+    t5 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+  }
+  else {
+    t0 = lm(PCB.amount ~ tissue.weight)
+    
+    tt = lm(PCB.amount ~ (momage > 35) + tissue.weight)
+    t1 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = lm(PCB.amount ~ (maternalBMI > 25) + tissue.weight)
+    t2 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = lm(PCB.amount ~ (birthyear > 2011) + tissue.weight)
+    t3 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+    
+    tt = lm(PCB.amount ~ diagnosis + tissue.weight)
+    t4 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 2)
+    
+    tt = lm(PCB.amount ~ sex + tissue.weight)
+    t5 = 1-pchisq(2*logLik(tt) - 2*logLik(t0), 1)
+  }
+  
+  f1 = tryCatch(fisher.test(table(momage > 35, detected))$p.value, error = function(e) NA)
+  f2 = tryCatch(fisher.test(table(maternalBMI > 25, detected))$p.value, error = function(e) NA)
+  f3 = tryCatch(fisher.test(table(birthyear > 2011, detected))$p.value, error = function(e) NA)
+  f4 = tryCatch(fisher.test(table(diagnosis, detected))$p.value, error = function(e) NA)
+  f5 = tryCatch(fisher.test(table(sex, detected))$p.value, error = function(e) NA)
+  result = rbind(result, c(f1, f2, f3, f4, f5, t1, t2, t3, t4, t5))
+}
+
+write.csv(data.frame(PCBs = Congener,
+                     number.detected = n.detected,
+                     MomAge.Detection = result[,1],
+                     MaternalBMI.Detection = result[,2],
+                     BirthYear.Detection = result[,3],
+                     Diagnosis.Detection = result[,4],
+                     Sex.Detection = result[,5],
+                     MomAge.Tobit = result[,6],
+                     MaternalBMI.Tobit = result[,7],
+                     BirthYear.Tobit = result[,8],
+                     Diagnosis.Tobit = result[,9],
+                     Sex.Tobit = result[,10]),
+          file = "PCBs_detection_frequency.csv", row.names = TRUE)
+
+detach()
+detach()
+
+
