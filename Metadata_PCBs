@@ -307,9 +307,3 @@ PCB180_193_cenMLE
 PCB187_cenMLE <- with(colData_PCB, cenreg(Cen(`PCB_187`, `PCB_187_Cen`) ~ Sex+MomAge+MaternalPlasmaPUFA+MomHispanic+DadEducation+HomeOwnership))
 PCB187_cenMLE
 #saved as spreadsheet: "PCB_taits_cenMLE"
-
-#multiple linear regression with PCBs and ASD, correcting for Birth Year
-PCB153_168_ASD <- with(colData_PCB, cenreg(Cen(`PCB_153+168`, `PCB_153+168_Cen`) ~ DiagnosisASD+BirthYear))
-PCB170_ASD <- with(colData_PCB, cenreg(Cen(`PCB_170`, `PCB_170_Cen`) ~ DiagnosisASD+BirthYear))
-PCB180_193_ASD <- with(colData_PCB, cenreg(Cen(`PCB_180+193`, `PCB_180+193_Cen`) ~ DiagnosisASD+BirthYear))
-PCB187_ASD <- with(colData_PCB, cenreg(Cen(`PCB_187`, `PCB_187_Cen`) ~ DiagnosisASD+BirthYear))
