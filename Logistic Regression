@@ -1,0 +1,25 @@
+#Logistic regression for ASD diagnosis (yes/no) and PCBs 153+168, 170, 180+193, 187 with covariates included
+
+Detected_153_168 <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/colData_PCB.xlsx", sheet = "PCB153_168")
+attach(Detected_153_168)
+Logit_153_168 <- glm(ASD ~ `PCB_153+168` + BirthYear + MaternalPlasmaPUFA, data = Detected_153_168, family = binomial)
+summary(Logit_153_168)
+detach(Detected_153_168)
+
+Detected_170 <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/colData_PCB.xlsx", sheet = "PCB170")
+attach(Detected_170)
+Logit_170 <- glm(ASD ~ `PCB_170` + PrenatalVitamin + BirthSeason + MomAge, data = Detected_170, family = binomial)
+summary(Logit_170)
+detach(Detected_170)
+
+Detected_180_193 <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/colData_PCB.xlsx", sheet = "PCB180_193")
+attach(Detected_180_193)
+Logit_180_193 <- glm(ASD ~ `PCB_180+193` + PrenatalVitamin + BirthSeason + MomAge + MaternalPlasmaPUFA, data = Detected_180_193, family = binomial)
+summary(Logit_180_193)
+detach(Detected_180_193)
+
+Detected_187 <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/colData_PCB.xlsx", sheet = "PCB187")
+attach(Detected_187)
+Logit_187 <- glm(ASD ~ `PCB_187` + BirthMonth + MaternalPlasmaPUFA, data = Detected_187, family = binomial)
+summary(Logit_187)
+detach(Detected_187)
