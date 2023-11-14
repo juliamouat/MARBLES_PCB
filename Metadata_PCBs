@@ -1,6 +1,6 @@
 #correlate PCBs with metadata 
-PCB_cen <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
-colData <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", sheet = 1)
+PCB_cen <- read.xlsx("MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+colData <- read.xlsx("sample_info.xlsx", sheet = 1)
 colData_PCB <- dplyr::right_join(colData, PCB_cen, by="Name")
 
 PCB153_168.Sex <- cenken(colData_PCB$`PCB_153+168`, colData_PCB$`PCB_153+168_Cen`, colData_PCB$Sex)
@@ -66,7 +66,7 @@ PCB153_168_metadata_correlations <- rbind(PCB153_168.Sex, PCB153_168.DiagnosisAS
                                           PCB153_168.GestationalAgeDelivery, PCB153_168.BirthMonth, PCB153_168.GestationalDiabetes, PCB153_168.ChronicHypertension,
                                           PCB153_168.PreEclampsia, PCB153_168.AgeADOS, PCB153_168.AgeMullen, PCB153_168.BirthYear)
 
-write.xlsx(as.data.frame(PCB153_168_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB153_168_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+write.xlsx(as.data.frame(PCB153_168_metadata_correlations), file = "PCB_traits/PCB153_168_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
 
 
 PCB170.Sex <- cenken(colData_PCB$`PCB_170`, colData_PCB$`PCB_170_Cen`, colData_PCB$Sex)
@@ -132,7 +132,7 @@ PCB170_metadata_correlations <- rbind(PCB170.Sex, PCB170.DiagnosisASD, PCB170.Mo
                                       PCB170.GestationalAgeDelivery, PCB170.BirthMonth, PCB170.GestationalDiabetes, PCB170.ChronicHypertension,
                                       PCB170.PreEclampsia, PCB170.AgeADOS, PCB170.AgeMullen, PCB170.BirthYear)
 
-write.xlsx(as.data.frame(PCB170_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB170_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+write.xlsx(as.data.frame(PCB170_metadata_correlations), file = "PCB_traits/PCB170_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
 
 PCB180_193.Sex <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$Sex)
 PCB180_193.DiagnosisASD <- cenken(colData_PCB$`PCB_180+193`, colData_PCB$`PCB_180+193_Cen`, colData_PCB$DiagnosisASD)
@@ -197,7 +197,7 @@ PCB180_193_metadata_correlations <- rbind(PCB180_193.Sex, PCB180_193.DiagnosisAS
                                           PCB180_193.GestationalAgeDelivery, PCB180_193.BirthMonth, PCB180_193.GestationalDiabetes, PCB180_193.ChronicHypertension,
                                           PCB180_193.PreEclampsia, PCB180_193.AgeADOS, PCB180_193.AgeMullen, PCB180_193.BirthYear)
 
-write.xlsx(as.data.frame(PCB180_193_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB180_193_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+write.xlsx(as.data.frame(PCB180_193_metadata_correlations), file = "PCB_traits/PCB180_193_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
 
 
 PCB187.Sex <- cenken(colData_PCB$`PCB_187`, colData_PCB$`PCB_187_Cen`, colData_PCB$Sex)
@@ -263,7 +263,7 @@ PCB187_metadata_correlations <- rbind(PCB187.Sex, PCB187.DiagnosisASD, PCB187.Mo
                                       PCB187.GestationalAgeDelivery, PCB187.BirthMonth, PCB187.GestationalDiabetes, PCB187.ChronicHypertension,
                                       PCB187.PreEclampsia, PCB187.AgeADOS, PCB187.AgeMullen, PCB187.BirthYear)
 
-write.xlsx(as.data.frame(PCB187_metadata_correlations), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB187_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
+write.xlsx(as.data.frame(PCB187_metadata_correlations), file = "PCB_traits/PCB187_metadata_cenken.xlsx", colNames = TRUE, rowNames = TRUE)
 
 #make heatmap of PCBs correlated with traits, to match the Comethyl heatmaps. Traits are categorized and organized hierarachically within categories
 library(ggplot2)
@@ -289,11 +289,11 @@ dev.off()
 
 
 #Calculate p-values and adjusted p-values for PCB-trait correlations
-PCB_traits_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_pvalues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_traits_p_values <- read.xlsx("PCB_traits/PCB_traits_pvalues.xlsx", colNames = TRUE, rowNames = TRUE)
 PCB_traits_fdr <- sapply(PCB_traits_p_values, p.adjust, method = "fdr")
-write.xlsx(as.data.frame(PCB_traits_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_fdr.xlsx")
+write.xlsx(as.data.frame(PCB_traits_fdr), file = "PCB_traits/PCB_traits_fdr.xlsx")
 #PCB_traits_Bonferroni <- sapply(PCB_traits_p_values, p.adjust, method = "bonferroni")
-#write.xlsx(as.data.frame(PCB_traits_Bonferroni), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/PCB_traits/PCB_traits_Bonferroni.xlsx")
+#write.xlsx(as.data.frame(PCB_traits_Bonferroni), file = "PCB_traits/PCB_traits_Bonferroni.xlsx")
 
 #multiple linear regression with PCBs and metadata traits
 #use all traits that are associated with PCB at p<0.2 after FDR correction (excel sheet "PCB_traits_fdr")
