@@ -1,4 +1,4 @@
-censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Censored_PCB_Data")
+censored_PCB_data <- read.xlsx("MARBLES_Paper_Data.xlsx", sheet = "Censored_PCB_Data")
 
 #Censored Boxplot -- Draws a boxplot with the highest censoring threshold shown as a horizontal line. Any statistics below this line are invalid and must be estimated using methods for censored data.
 censored_PCB_data$Diagnosis <- factor(censored_PCB_data$Diagnosis, levels=c("ASD", "non-TD", "TD"))
