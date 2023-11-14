@@ -9,9 +9,9 @@ library(ggplot2)
 
 #code from https://r-graph-gallery.com/297-circular-barplot-with-groups.html
 # Set a number of 'empty bar' to add at the end of each group
-data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Graphing PCB Data/NADA/NADA.xlsx", sheet = "percent_LOQ") 
+data <- read.xlsx("NADA.xlsx", sheet = "percent_LOQ") 
 
-data <- read.xlsx("/Users/juliamouat/Desktop/test.xlsx")
+data <- read.xlsx("test.xlsx")
 
 # Set a number of 'empty bar'
 empty_bar <- 30
