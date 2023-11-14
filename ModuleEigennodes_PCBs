@@ -1,7 +1,7 @@
 #MODULE EIGENNODE ~ PCB ASSOCIATIONS
-setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB")
-MEs <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Module_Eigennodes.xlsx")
-censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+setwd("ME_PCB")
+MEs <- read.xlsx("Module_Eigennodes.xlsx")
+censored_PCB_data <- read.xlsx("MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
 attach(censored_PCB_data)
 ME_PCB_all_samples <- dplyr::left_join(MEs, censored_PCB_data, by="Name")
 detach(censored_PCB_data)
@@ -22,7 +22,7 @@ Red_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$red) #P-value = 0.0462076
 Red_PCB <- as.data.frame(c(Red_PCB153_168, Red_PCB170, Red_PCB180_193, Red_PCB187))
 Red_PCB$Module <- "Red"
 
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_CpG_Clusters/logPCBy/PCB187_Red_sized.pdf", width = 5, height = 5)
+pdf("logPCBy/PCB187_Red_sized.pdf", width = 5, height = 5)
 par(mar = c(4,4,1,1))
 cenxyplot(red, MEcen, `PCB_187`, `PCB_187_Cen`, log="y", xlab = "Red Module Eigennode", ylab = "PCB 187 (ng p g)", col = "#882255", pch = 19)
 dev.off()
@@ -244,22 +244,22 @@ Darkturquoise_PCB187 <- cenken(`PCB_187`, `PCB_187_Cen`, ME_PCB$darkturquoise)
 Darkturquoise_PCB <- as.data.frame(c(Darkturquoise_PCB153_168, Darkturquoise_PCB170, Darkturquoise_PCB180_193, Darkturquoise_PCB187))
 Darkturquoise_PCB$Module <- "Darkturquoise"
 
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB153_168_Darkturquoise_sized.pdf", width = 5, height = 5)
+pdf("logPCBy/PCB153_168_Darkturquoise_sized.pdf", width = 5, height = 5)
 par(mar = c(4,4,1,1))
 cenxyplot(darkturquoise, MEcen, `PCB_153+168`, `PCB_153+168_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 153 + 168 (ng p g)", col = "#2A0179", pch = 19)
 dev.off()
 
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB170_Darkturquoise_sized.pdf", width = 5, height = 5)
+pdf("logPCBy/PCB170_Darkturquoise_sized.pdf", width = 5, height = 5)
 par(mar = c(4,4,1,1))
 cenxyplot(darkturquoise, MEcen, `PCB_170`, `PCB_170_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 170 (ng p g)", col = "#B8860B", pch = 19)
 dev.off()
 
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB180_193_Darkturquoise_sized.pdf", width = 5, height = 5)
+pdf("logPCBy/PCB180_193_Darkturquoise_sized.pdf", width = 5, height = 5)
 par(mar = c(4,4,1,1))
 cenxyplot(darkturquoise, MEcen, `PCB_180+193`, `PCB_180+193_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 180 + 193 (ng p g)", col = "#117733", pch = 19)
 dev.off()
 
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/logPCBy/PCB187_Darkturquoise_sized.pdf", width = 5, height = 5)
+pdf("logPCBy/PCB187_Darkturquoise_sized.pdf", width = 5, height = 5)
 par(mar = c(4,4,1,1))
 cenxyplot(darkturquoise, MEcen, `PCB_187`, `PCB_187_Cen`, log="y", xlab = "Darkturquoise Module Eigennode", ylab = "PCB 187 (ng p g)", col = "#882255", pch = 19)
 dev.off()
@@ -285,14 +285,14 @@ PCB_ME_stats <- PCB_ME_stats %>%
          PCB170_Slope = slope.1, PCB170_Intercept = intercept.1, PCB170_tau = tau.1, PCB170_Pvalue = p.1,
          PCB180_193_Slope = slope.2, PCB180_193_Intercept = intercept.2, PCB180_193_tau = tau.2, PCB180_193_Pvalue = p.2,
          PCB187_Slope = slope.3, PCB187_Intercept = intercept.3, PCB187_tau = tau.3, PCB187_Pvalue = p.3)
-write.xlsx(PCB_ME_stats, file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_Me_stats.xlsx")
+write.xlsx(PCB_ME_stats, file = "ME_PCB/PCB_Me_stats.xlsx")
 
 #make heatmap with PCB-ME correlations rotated and in same order as Comethyl-trait figure
 library(ggplot2)
 library(reshape)
-PCB_ME_correlations_flip <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_tau_correlations.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
+PCB_ME_correlations_flip <- read.xlsx("ME_PCB/PCB_ME_tau_correlations.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
 PCB_ME_correlations_ggplot_flip <- melt(PCB_ME_correlations_flip)
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/ME_PCB_ggplot_flip.pdf", width = 8, height = 4)
+pdf("ME_PCB/ME_PCB_ggplot_flip.pdf", width = 8, height = 4)
 PCB_ME_heatmap_ggplot_flip <- ggplot(data = PCB_ME_correlations_ggplot_flip, aes(x = variable, y = PCB, fill=value)) +
   geom_tile() +
   scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-0.4, 0.4), name = "Tau") +
@@ -308,17 +308,17 @@ dev.off()
 
 
 #FDR adjust p-values for PCB-ME correlations
-PCB_ME_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_ME_p_values <- read.xlsx("ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
 PCB_ME_fdr <- sapply(PCB_ME_p_values, p.adjust, method = "fdr")
-write.xlsx(as.data.frame(PCB_ME_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_fdr.xlsx")
+write.xlsx(as.data.frame(PCB_ME_fdr), file = "ME_PCB/PCB_ME_fdr.xlsx")
 
 
 
 
 #MODULE EIGENNODE FROM GENE BODIES WITH PCB CORRELATIONS
-setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies")
-MEs_Gene_Bodies <- read_csv("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/Gene_Bodies/Gene_Bodies_Module_Eigennodes.csv")
-censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
+setwd("ME_PCB/Module_Gene_Bodies")
+MEs_Gene_Bodies <- read_csv("Gene_Bodies_Module_Eigennodes.csv")
+censored_PCB_data <- read.xlsx("MARBLES_Paper_Data.xlsx", sheet = "Four_PCB_Cen")
 attach(censored_PCB_data)
 ME_PCB_all_samples <- dplyr::left_join(MEs_Gene_Bodies, censored_PCB_data, by="Name")
 detach(censored_PCB_data)
@@ -424,9 +424,9 @@ write.xlsx(PCB_ME_stats, file = "/Users/juliamouat/Library/Mobile Documents/com~
 #make heatmap with PCB-ME correlations rotated and in same order as Comethyl-trait figure
 library(ggplot2)
 library(reshape)
-PCB_ME_correlations_flip <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies/PCB_ME_Gene_Bodies_tau.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
+PCB_ME_correlations_flip <- read.xlsx("ME_PCB/Module_Gene_Bodies/PCB_ME_Gene_Bodies_tau.xlsx", sheet = "flip", colNames = TRUE, rowNames = FALSE)
 PCB_ME_correlations_ggplot_flip <- melt(PCB_ME_correlations_flip)
-pdf("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/Module_Gene_Bodies/ME_Gene_Bodies_PCB_ggplot_flip.pdf", width = 8, height = 4)
+pdf("ME_Gene_Bodies_PCB_ggplot_flip.pdf", width = 8, height = 4)
 PCB_ME_heatmap_ggplot_flip <- ggplot(data = PCB_ME_correlations_ggplot_flip, aes(x = variable, y = PCB, fill=value)) +
   geom_tile() +
   scale_fill_gradientn(colors = WGCNA::blueWhiteRed(100, gamma = 0.9), limits = c(-0.4, 0.4), name = "Tau") +
@@ -440,6 +440,6 @@ dev.off()
 
 
 #FDR adjust p-values for PCB-ME correlations
-PCB_ME_p_values <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
+PCB_ME_p_values <- read.xlsx("ME_PCB/PCB_ME_pValues.xlsx", colNames = TRUE, rowNames = TRUE)
 PCB_ME_fdr <- sapply(PCB_ME_p_values, p.adjust, method = "fdr")
-write.xlsx(as.data.frame(PCB_ME_fdr), file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/NADA/ME_PCB/PCB_ME_fdr.xlsx")
+write.xlsx(as.data.frame(PCB_ME_fdr), file = "ME_PCB/PCB_ME_fdr.xlsx")
