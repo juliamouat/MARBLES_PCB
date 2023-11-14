@@ -1,7 +1,7 @@
 #load packages
 .libPaths("/share/lasallelab/programs/comethyl/R_4.1.0/rtest")
 AnnotationHub::setAnnotationHubOption("CACHE", value = "/share/lasallelab/programs/comethyl/R_4.1.0/rtest")
-setwd("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1")
+setwd("Females_Males/Paper/V1")
 library(tidyverse)
 library(WGCNA)
 library(comethyl)
@@ -17,9 +17,9 @@ disableWGCNAThreads()
 
 # Read Bismark CpG Reports ####
 colData <- openxlsx::read.xlsx("sample_info.xlsx", rowNames = TRUE)
-setwd("/share/lasallelab/Jules/MARBLES_PCB/placenta_cytosine_reports")
-bs <- getCpGs(colData, file = "/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Unfiltered_BSseq.rds")
-setwd("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1")
+setwd("placenta_cytosine_reports")
+bs <- getCpGs(colData, file = "Paper/V1/Unfiltered_BSseq.rds")
+setwd("Paper/V1")
 
 # Examine CpG Totals at Different Cutoffs ####
 CpGtotals <- getCpGtotals(bs, file = "CpG_Totals.txt")
@@ -279,7 +279,7 @@ plotMEtraitScatter(MEs$royalblue, trait = colData$Apgar5min, ylim = c(-0.15, 0.1
 
 # Plot Region Methylation vs Traits
 regions <- modules$regions
-meth <- readRDS("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Region_Methylation.rds")
+meth <- readRDS("Comethyl/V1/Region_Methylation.rds")
 plotMethTrait("salmon", regions = regions, meth = meth,
               trait = colData$DiagnosisASD, traitCode = c("TD" = 0, "non-TD" = 1, "ASD" = 2),
               traitColors = c("TD" = "#3366CC", "non-TD" = "#258f1a", "ASD" = "#FF3366"),
@@ -324,18 +324,9 @@ enrich_PCB_modules <- enrichModule(regions, module = c("darkturquoise", "red", "
                                file = "PCB_Module_Enrichment.txt")
 plotEnrichment(enrich_PCB_modules, file = "PCB_Module_Enrichment_Plot.pdf")
 
-
-
-setwd("~/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1")
-
-#Load data 
-colData <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/sample_info.xlsx", rowNames=TRUE)
-modules <- readRDS("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Comethyl/V1/Modules.rds")
-regions <- modules$regions
-
-
 # Circos Plot ####
 library(circlize)
+regions <- modules$regions
 regions_col <- subset(regions, !module == "grey") %>%
   dplyr::select(chr, start, end, module)
 pdf("Module_Circos_Plot.pdf", width = 3.5, height = 3.5)
@@ -349,9 +340,6 @@ circos.genomicTrack(regions_col, ylim = c(0, 1),
                     })
 circos.clear()
 dev.off()
-
-
-
 
 # Module Region Counts ####
 region_counts <- table(regions_col$module) %>% sort(decreasing = TRUE) %>%
