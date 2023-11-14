@@ -10,10 +10,10 @@
 #Maternal BMI: maternal BMI pre-pregnancy, grouped into underweight/normal weight (=<25) vs overweight/obese (>25)
 #BirthYear: year the offspring was born, grouped into 2006-2011 and 2012-2016
 
-setwd("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection")
+setwd("Frequency_Detection")
 
-PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx", sheet = "PCB (ng)")
-Metadata <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx", sheet = "Metadata")
+PCB_data <- read.xlsx("Frequency_Detection.xlsx", sheet = "PCB (ng)")
+Metadata <- read.xlsx("Frequency_Detection.xlsx", sheet = "Metadata")
 
 PCBfile = merge(PCB_data, Metadata, by = "tissueID", all = FALSE, sort = FALSE)
 write.xlsx(PCBfile, "/Users/juliamouat/Desktop/PCBfile.xlsx")
@@ -23,7 +23,7 @@ library(coin)
 library(VGAM)
 library(censReg)
 
-PCB.file ="/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Frequency_Detection/Frequency_Detection.xlsx"
+PCB.file ="Frequency_Detection.xlsx"
 mydata = data.frame(id = as.character(read_excel(PCB.file, range="F2:CW2", col_name=FALSE)),
                     sex = as.character(read_excel(PCB.file, range = "F6:CW6", col_name=FALSE)),
                     diagnosis = as.character(read_excel(PCB.file, range = "F7:CW7", col_name=FALSE)),
