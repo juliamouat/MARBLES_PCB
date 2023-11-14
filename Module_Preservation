@@ -13,14 +13,14 @@ enableWGCNAThreads(nThreads = 2)
 
 # Create and Filter BSseq Object -----------------------------------------------
 # Filter Sample Trait Table ####
-setwd("/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI")
+setwd("Preservation_EARLI")
 colData <- openxlsx::read.xlsx("sample_info_preservation.xlsx", rowNames = TRUE)
 
 # Read Bismark CpG Reports ####
-setwd("/share/lasallelab/Jules/MARBLES_PCB/placenta_cytosine_reports")
-bs <- getCpGs(colData, file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Preservation_Unfiltered_BSseq.rds") # 29.4M CpGs (29401795)
-setwd("/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI")
-bs_disc <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Filtered_BSseq.rds") # 13.056694M CpGs (w cutoffs of cov=4 and perSample=0.8)
+setwd("/placenta_cytosine_reports")
+bs <- getCpGs(colData, file = "Preservation_EARLI/Preservation_Unfiltered_BSseq.rds") # 29.4M CpGs (29401795)
+setwd("Preservation_EARLI")
+bs_disc <- readRDS("Filtered_BSseq.rds") # 13.056694M CpGs (w cutoffs of cov=4 and perSample=0.8)
 bs <- IRanges::subsetByOverlaps(bs, ranges = bs_disc) # 13.056694M CpGs (filtered for CpGs in discovery BSseq)
 bs <- filterCpGs(bs, cov = 1, perSample = 0.01, # 20.6M CpGs (lost 102K CpGs with no reads, 0.5%)
                  file = "Preservation_Filtered_BSseq.rds")
@@ -28,7 +28,7 @@ rm(bs_disc)
 
 # Call Regions and Build Network Using CpG Clusters ----------------------------
 # Call Regions ####
-regions_disc <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Modules.rds") %>%
+regions_disc <- readRDS("Modules.rds") %>%
   .[["regions"]] %>% select(chr, start, end, RegionID) # Use discovery regions
 regions_disc <- with(regions_disc,
                      GenomicRanges::GRanges(seqnames = chr,
@@ -36,78 +36,78 @@ regions_disc <- with(regions_disc,
                                             name = RegionID))
 regions <- getRegions(bs, custom = regions_disc, n = 1, save = FALSE)
 regions <- select(regions, RegionID = name, chr:methSD)
-write_tsv(regions, file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Unfiltered_Regions.txt")
+write_tsv(regions, file = "Unfiltered_Regions.txt")
 plotRegionStats(regions, maxQuantile = 0.99,
-                file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Unfiltered_Region_Plots.pdf")
+                file = "Unfiltered_Region_Plots.pdf")
 plotSDstats(regions, maxQuantile = 0.99,
-            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Unfiltered_SD_Plots.pdf")
+            file = "Unfiltered_SD_Plots.pdf")
 
 # Examine Region Totals at Different Cutoffs ####
 regionTotals <- getRegionTotals(regions,
-                                file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Region_Totals.txt")
-plotRegionTotals(regionTotals, file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Region_Totals.pdf")
+                                file = "Region_Totals.txt")
+plotRegionTotals(regionTotals, file = "Region_Totals.pdf")
 
 # Filter Regions ####
 regions <- filterRegions(regions, covMin = 5, methSD = 0.05, # 196,967 regions (199,945 regions in discovery)
-                         file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Filtered_Regions.txt")
+                         file = "Filtered_Regions.txt")
 plotRegionStats(regions, maxQuantile = 0.99,
-                file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Filtered_Region_Plots.pdf")
+                file = "Filtered_Region_Plots.pdf")
 plotSDstats(regions, maxQuantile = 0.99,
-            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Filtered_SD_Plots.pdf")
+            file = "Filtered_SD_Plots.pdf")
 
 # Adjust Methylation Data for PCs ####
 meth <- getRegionMeth(regions, bs = bs,
-                      file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Region_Methylation.rds")
+                      file = "Region_Methylation.rds")
 mod <- model.matrix(~1, data = bsseq::pData(bs))
 methAdj <- adjustRegionMeth(meth, mod = mod, # Top 16 PCs
-                            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Adjusted_Region_Methylation.rds")
+                            file = "Adjusted_Region_Methylation.rds")
 getDendro(methAdj, distance = "euclidean") %>%
-  plotDendro(file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Sample_Dendrogram.pdf",
+  plotDendro(file = "Sample_Dendrogram.pdf",
              expandY = c(0.25, 0.08))
 
 # Select Soft Power Threshold ####
 sft <- getSoftPower(methAdj, powerVector = 1:30, corType = "pearson",
-                    file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Soft_Power.rds")
-plotSoftPower(sft, file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Soft_Power_Plots.pdf")
+                    file = "Soft_Power.rds")
+plotSoftPower(sft, file = "Soft_Power_Plots.pdf")
 
 # Get Comethylation Modules ####
 #try power of 23 to get high fit 
 modules <- getModules(methAdj, power = 23, regions = regions, corType = "pearson",
-                      nThreads = 2, file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Modules.rds")
+                      nThreads = 2, file = "Modules.rds")
 
 # Examine Correlations between Modules and Samples ####
 MEs <- modules$MEs
 moduleDendro <- getDendro(MEs, distance = "bicor")
 plotDendro(moduleDendro, labelSize = 2.5, nBreaks = 5, width = 48, height = 8,
            expandX = c(0.015, 0.015), expandY = c(0.15, 0.08),
-           file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Module_ME_Dendrogram.pdf")
+           file = "Module_ME_Dendrogram.pdf")
 moduleCor <- getCor(MEs, corType = "bicor")
 plotHeatmap(moduleCor, rowDendro = moduleDendro, colDendro = moduleDendro,
             axis.text.size = 4, rowDendroMargins = c(-1.55, 0.95, -0.1, -0.5),
             colDendroMargins = c(0.95, -0.5, -0.5, 0.8),
-            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Module_Correlation_Heatmap.pdf",
+            file = "Module_Correlation_Heatmap.pdf",
             width = 22, height = 19)
 
 sampleDendro <- getDendro(MEs, transpose = TRUE, distance = "bicor")
 plotDendro(sampleDendro, labelSize = 3, nBreaks = 5,
-           file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Sample_ME_Dendrogram.pdf")
+           file = "Sample_ME_Dendrogram.pdf")
 sampleCor <- getCor(MEs, transpose = TRUE, corType = "bicor")
 plotHeatmap(sampleCor, rowDendro = sampleDendro, colDendro = sampleDendro,
-            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Sample_Correlation_Heatmap.pdf")
+            file = "Sample_Correlation_Heatmap.pdf")
 
 plotHeatmap(MEs, rowDendro = sampleDendro, colDendro = moduleDendro,
             legend.title = "Module\nEigennode", legend.position = c(0.37,0.89),
-            file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Sample_ME_Heatmap.pdf",
+            file = "Sample_ME_Heatmap.pdf",
             width = 33, axis.text.size = 6)
 
 
 
 # Compare CpG Cluster Modules Between Discovery and Replication ----------------
 # Setup ####
-modules_disc <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Modules.rds")
-methAdj_disc <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Females_Males/Paper/V1/Adjusted_Region_Methylation.rds")
-modules_rep <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Modules.rds")
-methAdj_rep <- readRDS("/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Adjusted_Region_Methylation.rds")
+modules_disc <- readRDS("Modules.rds")
+methAdj_disc <- readRDS("Adjusted_Region_Methylation.rds")
+modules_rep <- readRDS("Preservation_EARLI/Modules.rds")
+methAdj_rep <- readRDS("Preservation_EARLI/Adjusted_Region_Methylation.rds")
 
 # Calculate Module Preservation ####
 # Change columns from region IDs to genomic coordinates (region IDs don't correspond)
@@ -164,7 +164,7 @@ preservationStats <- bind_rows(preservationStats) %>%
   select(module, moduleSize, category, statistic:log.p) %>%
   arrange(module)
 write_tsv(preservationStats,
-          file = "/share/lasallelab/Jules/MARBLES_PCB/Preservation_EARLI/Module_Preservation_Statistics.txt")
+          file = "Preservation_EARLI/Module_Preservation_Statistics.txt")
 
 # Summarize Results ####
 # Which modules are good quality?
