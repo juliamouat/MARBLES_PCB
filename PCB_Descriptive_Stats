@@ -9,15 +9,10 @@ library(survival)
 
 library(openxlsx)
 
-MARBLES_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx")
-attach(MARBLES_data)
-detach(MARBLES_data)
-
 #Kaplan-Meier Survival Curves for PCB values from maternal serum. 95% confidence interval graphed
 
-censored_PCB_data <- read.xlsx("/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Metadata/MARBLES_Paper_Data.xlsx", sheet = "Censored_PCB_Data")
+censored_PCB_data <- read.xlsx("MARBLES_Paper_Data.xlsx", sheet = "Censored_PCB_Data")
 attach(censored_PCB_data)
-detach(censored_PCB_data)
 
 KM_PCB153_168 = cenfit(`PCB_153+168`, `PCB_153+168_Cen`)
 KM_PCB153_168
@@ -34,7 +29,6 @@ plot(KM_PCB180_193, xlab = "PCB 180 + 193", ylab = "Probability of value being >
 KM_PCB187 = cenfit(`PCB_187`, `PCB_187_Cen`)
 KM_PCB187
 plot(KM_PCB187, xlab = "PCB 187", ylab = "Probability of value being >LOD", col = "blue4")
-
 
 #ROS (Regression on Order Statistics) to see how well PCB values fit a log-normal distribution
 ROS_PCB153_168 = cenros(`PCB_153+168`, `PCB_153+168_Cen`)
@@ -57,8 +51,6 @@ ROS_PCB187
 plot(ROS_PCB187, ylab = "PCB 187", col = "blue4", cex = 0.7)
 summary(ROS_PCB187)
 
-
-
 #Descriptive Stats for Kaplan Meier, ROS, and MLE Methods
 censtats_PCB153_168 <- censtats(`PCB_153+168`, `PCB_153+168_Cen`)
 stats_PCB153_168 <- cbind(PCB = "PCB 153+168", censtats_PCB153_168)
@@ -73,4 +65,4 @@ censtats_PCB187 <- censtats(`PCB_187`, `PCB_187_Cen`)
 stats_PCB187 <- cbind(PCB = "PCB 187", censtats_PCB187)
 
 censtats_merge <- rbind(stats_PCB153_168, stats_PCB170, stats_PCB180_193, stats_PCB187)
-write.xlsx(censtats_merge, file = "/Users/juliamouat/Library/Mobile Documents/com~apple~CloudDocs/LaSalle Lab/MARBLES /MARBLES PCB/Paper/Descriptive_Stats", sheet = 1, sep = "", rowNames = TRUE)
+write.xlsx(censtats_merge, file = "Descriptive_Stats", sheet = 1, sep = "", rowNames = TRUE)
